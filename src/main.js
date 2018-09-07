@@ -13,12 +13,13 @@ import {
     universe,
     createRings,
     spike,
-    rocketObj,
+    rocketObj
 } from "./meshes"
 
 import {
     deviceSettings,
     cacheImages,
+    cacheFonts,
     colorMix,
     interpolation
 } from "./util";
@@ -71,8 +72,9 @@ document.getElementById("interactive").addEventListener('mouseup', onMouseUp, fa
 document.getElementById("interactive").addEventListener('mouseleave', onMouseLeave, false);
 async function init() {
     let cacheF = cacheImages();
+    let cacheF1 = cacheFonts();
     let imgs = await cacheF();
-
+    let fonts = await cacheF1();
     let _initStage = fp.flow(setScene, setCamera, setRender, setLights, animate);
 
     _initStage();
@@ -87,7 +89,7 @@ async function init() {
     await scene.add(createRings());
     await scene.add(earthRotation)
     await scene.add(outerEarth(imgs[1]))
-    await scene.add(rocketObj());
+ //   await scene.add(rocketObj(fonts[2]));
 
 }
 

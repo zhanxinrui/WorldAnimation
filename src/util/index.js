@@ -65,14 +65,15 @@ function cacheImages() {
 
 }
 function cacheFonts(){
-    let fonts = ["gentilis_bold.typeface.png","gentilis_regular.typeface.json",
+    let fonts = ["gentilis_bold.typeface.json","gentilis_regular.typeface.json",
     "helvetiker_regular.typeface.json","optimer_bold.typeface.json","optimer_regular.typeface.json"];
     return ()=>{
         let caches = fonts.map(v=>{
             return new Promise((resolve) => {
-                let _font = new Font();
-                _font.src = require("../assets/"+v);
-                _font.onload = () => resolve(_font);
+                let _font = {
+                src: require("../assets/"+v),
+                onload : () => resolve(_font)
+                }
             })
         });
         return Promise.all(caches);

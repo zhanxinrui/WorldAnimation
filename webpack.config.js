@@ -29,6 +29,9 @@ module.exports = {
         },{
             test: /\.(png|jpg)$/,
             loader: 'url-loader?limit=8192&name=images/[hash:8].[name].[ext]'
+        },{
+            test: /\.(json)$/,
+            loader: 'url-loader?limit=8192&name=fonts/[hash:8].[name].[ext]'
         }
     ]
     },
