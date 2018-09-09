@@ -12,6 +12,7 @@ module.exports = {
         inline: true,
         port:8009
     },
+
     module: {
         rules: [{
             test: /(\.jsx|\.js)$/,
@@ -31,7 +32,8 @@ module.exports = {
             loader: 'url-loader?limit=8192&name=images/[hash:8].[name].[ext]'
         },{
             test: /\.(json)$/,
-            loader: 'url-loader?limit=8192&name=fonts/[hash:8].[name].[ext]'
+            loader: 'file-loader?limit=8192&name=fonts/[hash:8].[name].[ext]'
+            // loader: 'file-loader',options:{name:'fonts/[hash:8].[name].[ext]'}
         }
     ]
     },

@@ -3,21 +3,22 @@ import {
     earthMap,
     earthBuffer,
     outerEarth,
-    spike
+    spike,
+    
 } from "./earth";
 import universe from "./universe";
 import createRings from "./rings";
 import createStars from "./stars";
-import rocketObj from "./rocket";
+import createRocket from "./rocket";
 export {
     innerEarth,
     earthMap,
     earthBuffer,
     outerEarth,
     rocketObj,
-
     universe,
     spike,
     createRings,
-    createStars
+    createStars,
+    createRocket
 }

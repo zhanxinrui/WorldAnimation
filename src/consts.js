@@ -6,17 +6,19 @@ window.consts = {
     camera: null,
     cameraTarget: "auto",
 
+    // globeMaxZoom: 70,
+    // globeMinZoom: 5000,
+    // targetCameraZ: 2000,
     globeMaxZoom: 90,
     globeMinZoom: 300,
     targetCameraZ: 230,
-
     renderer: null,
 
     rotationObject: null,
     earthObject: null,
 
-    colorPrimary: "#33CCFF",
-    colorDarken: "#000000",
+    colorPrimary: "#104e8b",
+    colorDarken: "#191970",
     globeRadius: 65,
     toRAD: Math.PI / 180,
 

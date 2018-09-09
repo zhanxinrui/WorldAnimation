@@ -5,42 +5,64 @@ import {
     latLongToVector3
 } from "../util"
 import consts from "../consts";
-let _geomerty = new THREE.SphereBufferGeometry(consts.globeRadius, 64, 64);
+let _geometry = new THREE.SphereBufferGeometry(consts.globeRadius-5, 64, 64);
+let _geometry1 = new THREE.SphereBufferGeometry(consts.globeRadius,64,64);
+//var _geometry1 = new THREE.CylinderBufferGeometry( 100, 100, 80, 32 );
+_geometry1.openEnded = false;
+//function coreEarth()
+function innerCore() {
+    let _material = new THREE.MeshPhongMaterial({
+        color: new THREE.Color(0xFF0000),
+        transparent: true,
+        blending: THREE.AdditiveBlending
+    });
 
+    return new THREE.Mesh(_geometry1, _material)
+}
+//function coreEarth()
 function innerEarth() {
     let _material = new THREE.MeshPhongMaterial({
-        color: new THREE.Color(colorMix(.75)),
+        //color: new THREE.Color(colorMix(.65)),
+        color: new THREE.Color(0xffffff),
         transparent: true,
-        blending: THREE.AdditiveBlending,
+        blending: THREE.NoBlending,
         side: THREE.FrontSide,
         opacity: 1,
-        fog: true,
+    //fog: true,
         depthWrite: false,
-        depthTest: false
+        depthTest: false,
+   //     renderOrder:1
     });
-    return new THREE.Mesh(_geomerty, _material)
+    return new THREE.Mesh(_geometry, _material)
 }
 
-function earthMap(img) {
+/*    let images = ["dot-inverted.png", "earth-glow.jpg",
+        "map_inverted.png", "map.png",
+        "star.jpg", "universe.jpg"
+    ];*/
+function earthMap(img) {//map.png
     let _texture, _material;
     _texture = new THREE.TextureLoader().load(img.src);
 
-    _texture.anisotropy = 16;
+    _texture.anisotropy = 16; //各向异性过滤。使用各向异性过滤能够使纹理的效果更好，但是会消耗更多的内存、CPU、GPU时间。
     _material = new THREE.MeshBasicMaterial({
         map: _texture,
-        color: new THREE.Color(colorMix(.75)),
-        transparent: true,
+        color: new THREE.Color(colorMix(.75)),//就是地图的颜色混合的均匀与否
+      //  color:new THREE.Color(0x000000),
+        transparent: true, 
+    //opacity: 1,
         blending: THREE.AdditiveBlending,
-        side: THREE.DoubleSide,
-        fog: true,
+        side: THREE.FrontSide,
+        fog: false,
         depthWrite: false,
-        depthTest: false
+        depthTest: false,
+      //  renderOrder:2,
     });
     _material.needsUpdate = true;
-    return new THREE.Mesh(_geomerty, _material)
+    return new THREE.Mesh(_geometry1, _material)
 }
 
-function earthBuffer(img) {
+function earthBuffer(img) {//就是那些小方块 map_inverted.png
     let globeCloudVerticesArray = [],
         globeCloud;
     let canvas = document.createElement("canvas");
@@ -51,8 +73,8 @@ function earthBuffer(img) {
     ctx.drawImage(img, 0, 0, img.width, img.height);
 
     var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    for (var i = 0; i < imageData.data.length; i += 4) {
-        var curX = (i / 4) % canvas.width;
+    for (var i = 0; i < imageData.data.length; i +=4) {
+        var curX = (i / 4) % canvas.width;  //四个点取一个,不明白为什么取四才有效果
         var curY = ((i / 4) - curX) / canvas.width;
         if (((i / 4)) % 2 === 1 && curY % 2 === 1) {
             var color = imageData.data[i];
@@ -61,7 +83,7 @@ function earthBuffer(img) {
                 var y = curY;
                 var lat = (y / (canvas.height / 180) - 90) / -1;
                 var lng = x / (canvas.width / 360) - 180;
-                var position = latLongToVector3(lat, lng, consts.globeRadius, -0.1);
+                var position = latLongToVector3(lat, lng, consts.globeRadius, -1.3);
                 globeCloudVerticesArray.push(position);
             }
         }
@@ -81,22 +103,37 @@ function earthBuffer(img) {
         size: 0.75,
         fog: true,
         vertexColors: THREE.VertexColors,
-        //transparent: true,
-        //blending: THREE.AdditiveBlending,
-        depthWrite: false //, depthTest: false
+      //  transparent:false,
+   //  transparent: true,  只能有最外层是透明的，其他的必须实心
+      //  opacity: 0.7,
+     // side:THREE.FrontSide,
+        //blending: THREE.NormalBlending,
+       // blending: THREE.AdditiveBlending,
+
+        transparent: true,
+        opacity: 1,
+
+        blending: THREE.AdditiveBlending,
+        side: THREE.FrontSide,
+        fog: true,
+        // depthWrite: false,
+        // depthTest: false,
+      //  renderOrder:3,
     });
 
     var colors = new Float32Array(globeCloudVerticesArray.length * 3);
     var globeCloudColors = [];
     for (var i = 0; i < globeCloudVerticesArray.length; i++) {
-        var tempPercentage = generateRandomNumber(80, 90) * 0.01;
-        var shadedColor = colorMix(tempPercentage, consts.colorPrimary, consts.colorDarken);
+        var tempPercentage = generateRandomNumber(80, 90)*0.02 ;//0 位primary 100位 colorDaraken
+        var shadedColor = colorMix(tempPercentage, consts.colorPri);//修改过
+        //var shadedColor =  0xffffff;
         globeCloudColors[i] = new THREE.Color(shadedColor);
     }
     for (var i = 0; i < globeCloudVerticesArray.length; i++) {
         colors[i * 3] = globeCloudColors[i].r;
         colors[i * 3 + 1] = globeCloudColors[i].g;
         colors[i * 3 + 2] = globeCloudColors[i].b;
+     //   console.log('r:'+globeCloudColors[i*3].r+'g:'+globeCloudColors[i*3+1].g+'b:'+globeCloudColors[i*3+2].b);
     }
     globeCloudBufferGeometry.addAttribute('color', new THREE.BufferAttribute(colors, 3));
     globeCloudBufferGeometry.colorsNeedUpdate = true;
@@ -122,11 +159,14 @@ function outerEarth(img) {
     globeGlowBufferGeometry = new THREE.PlaneBufferGeometry(globeGlowSize, globeGlowSize, 1, 1);
     globeGlowMaterial = new THREE.MeshBasicMaterial({
         map: globeGlowTexture,
-        color: consts.colorPrimary,
+       // color: consts.colorPrimary,
+       color:0xffffff,
         transparent: true,
         opacity: 1,
-        fog: false,
-        blending: THREE.AdditiveBlending,
+
+        fog: true,
+        blending: THREE.NormalBlending,
+
         depthWrite: false ,
         depthTest: false
     });
@@ -177,11 +217,15 @@ function spike() {
         linewidth: 1,
         color: new THREE.Color(colorMix(.5)),
         transparent: true,
+        opacity: 0.7,
+
         blending: THREE.AdditiveBlending,
+
         side: THREE.DoubleSide,
         fog: true,
         depthWrite: false,
-        depthTest: false
+        depthTest: false,
+        //renderOrder:0
     });
 
     spikesBufferGeometry = new THREE.BufferGeometry();
@@ -197,5 +241,6 @@ export {
     earthMap,
     earthBuffer,
     outerEarth,
-    spike
+    spike,
+   // innerCore
 }

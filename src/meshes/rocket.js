@@ -1,10 +1,6 @@
 import * as THREE from "three";
 import * as TWEEN from "../util/Tween";
 
-
-
-
-
 //创建火箭模型主体
 var rocketGroup =new THREE.Group();
 function initObject() {
@@ -35,17 +31,28 @@ function initObject() {
 
     //material
     var material = new THREE.MeshPhongMaterial( { color:0xffffff,//用于机身
-        shininess:30,
+        shininess:0,
        // specular: 0x101010,
         reflectivity:0,
-        refractionRation:1                
+        refractionRation:0,
+       // blending: THREE.NormalBlending     
+       transparent: true,
+       renderOrder:4       
     } ),
-        material1 =  new THREE.MeshLambertMaterial(0xffffff),
-        materia3 = new THREE.MeshPhongMaterial( { color:0xbf5959 ,//红色装饰
-        shininess:30,
+        material1 =  new THREE.MeshLambertMaterial(0xffffff);
+        material1.transparent = true;
+        material1.renderOrder= 4;
+       // material1.blending =THREE.NormalBlending;       
+
+    var materia3 = new THREE.MeshPhongMaterial( { color:0xbf5959 ,//红色装饰
+        shininess:10,
        // specular: 0x101010,
         reflectivity:0,
-        refractionRation:1                
+        refractionRation:0.5,
+        transparent:true,
+        renderOrder:4
+      //  blending:THREE.NormalBlending            
+           
     } );
      
     //Mesh
@@ -109,14 +116,16 @@ function initObject() {
 
    // cube.position = new THREE.Vector3(0,0,1);
   //  rocketGroup.position.set(0,0,0);
-    scene.add(rocketGroup);
+   // scene.add(rocketGroup);
 }
 //每一个火苗的创建
 function initFire(){
     var fireGroup = new THREE.Group();
     var material = new THREE.SpriteMaterial( {
         map: new THREE.CanvasTexture( generateSprite() ),
-        blending: THREE.AdditiveBlending
+        blending: THREE.AdditiveBlending,
+        transparent:true,
+        renderOrder:4
     } );
     for ( var i = 0; i < 200; i++ ) {
 
@@ -228,9 +237,10 @@ function initParticle( particle, delay ) {
 // 创建文字
 function createText(font) {
     var text = new THREE.FontLoader().load(font.src, function(text) {
+        console.log(font.src);
         var gem = new THREE.TextGeometry('UF', {
             size: 20, //字号大小，一般为大写字母的高度
-            height: 10, //文字的厚度
+            height: 0, //文字的厚度
             weight: 'normal', //值为'normal'或'bold'，表示是否加粗
             font: text, //字体，默认是'helvetiker'，需对应引用的字体文件
             style: 'normal', //值为'normal'或'italics'，表示是否斜体
@@ -244,17 +254,23 @@ function createText(font) {
             shininess:30,
            // specular: 0x101010,
             reflectivity:0,
-            refractionRation:1                
+            refractionRation:1 ,
+           blending: THREE.NormalBlending , 
+           transparent:true,
+          depthWrite: false,
+          depthTest: false,
+          renderOrder:4
+        
         } );
         var textObj = new THREE.Mesh(gem, mat);
         textObj.castShadow = true;
-        textObj.position.set(0,-219,35);
+        textObj.position.set(0,-200,35);
         rocketGroup.add(textObj);
         textObj.rotation.z = Math.PI*1/2;
     });//不懂为什么要用回调函数
-    var text1 = new THREE.FontLoader().load('../fonts/helvetiker_bold.typeface.json', function(text) {
+    var text1 = new THREE.FontLoader().load(font.src, function(text) {
         var gem1 = new THREE.TextGeometry('LOG IN', {
-            size: 20, //字号大小，一般为大写字母的高度
+            size: 40, //字号大小，一般为大写字母的高度
             height: 10, //文字的厚度
             weight: 'normal', //值为'normal'或'bold'，表示是否加粗
             font: text, //字体，默认是'helvetiker'，需对应引用的字体文件
@@ -269,7 +285,13 @@ function createText(font) {
             shininess:30,
            // specular: 0x101010,
             reflectivity:0,
-            refractionRation:1                
+            refractionRation:1 ,       
+           transparent:true,
+
+            blending: THREE.NormalBlending   ,    
+           depthWrite: false,
+           depthTest: false,
+           renderOrder:4
         } );
         var textObj = new THREE.Mesh(gem1, mat);
         textObj.castShadow = true;
@@ -298,9 +320,32 @@ function createText(font) {
 
 // }
 
-function rocketObj(font){
+// function rocketObj(font){
+//     console.log('rocket ok');
+//     console.log(font.src);
+// 	createFire();
+//     initObject();
+//     createText(font);
+// 	return rocketGroup;
+// }
+
+function resizeRocket(){
+    rocketGroup.scale.x = rocketGroup.scale.y = 0.48;
+    rocketGroup.position.set(-20,0,-800);
+
+}
+export default function createRocket(font){
+
+    resizeRocket();
+    console.log('rocket ok');
+   //` console.log(font.src);
 	createFire();
     initObject();
     createText(font);
+   // console.log('in rocket rocketGroup is '+typeof rocketGroup);5
+
 	return rocketGroup;
 }
+
+
+

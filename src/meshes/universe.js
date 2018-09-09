@@ -10,7 +10,7 @@ function universe(img){
         map: _texture,
         blending: THREE.AdditiveBlending,
         color: new THREE.Color(consts.colorPrimary),
-        transparent: true,
+        transparent: false,
         opacity:1,
         
         fog: false,
