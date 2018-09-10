@@ -1,3 +1,4 @@
+
 window.consts = {
 
     scene: null,
@@ -9,9 +10,11 @@ window.consts = {
     // globeMaxZoom: 70,
     // globeMinZoom: 5000,
     // targetCameraZ: 2000,
-    globeMaxZoom: 90,
-    globeMinZoom: 300,
-    targetCameraZ: 230,
+    globeMaxZoom: 300,
+    globeMinZoom: 3000,
+    targetCameraZ: 1500,
+    cameraMaxView:1500*0.9,//和targetCameraZ一致
+    globeRadius: 500,
     renderer: null,
 
     rotationObject: null,
@@ -19,7 +22,7 @@ window.consts = {
 
     colorPrimary: "#104e8b",
     colorDarken: "#191970",
-    globeRadius: 65,
+
     toRAD: Math.PI / 180,
 
     mouse: {
@@ -29,7 +32,7 @@ window.consts = {
         mouseXOnMouseDown: 0,
         mouseYOnMouseDown: 0,
 
-        targetRotationX: .45,
+        targetRotationX: .45,  //初始旋转x弧度
         targetRotationY: 0,
         targetRotationXOnMouseDown: 0,
         targetRotationYOnMouseDown: 0

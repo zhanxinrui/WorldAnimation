@@ -5,7 +5,7 @@ import {
     latLongToVector3
 } from "../util"
 import consts from "../consts";
-let _geometry = new THREE.SphereBufferGeometry(consts.globeRadius-5, 64, 64);
+let _geometry = new THREE.SphereBufferGeometry(consts.globeRadius, 64, 64);
 let _geometry1 = new THREE.SphereBufferGeometry(consts.globeRadius,64,64);
 //var _geometry1 = new THREE.CylinderBufferGeometry( 100, 100, 80, 32 );
 _geometry1.openEnded = false;
@@ -22,8 +22,8 @@ function innerCore() {
 //function coreEarth()
 function innerEarth() {
     let _material = new THREE.MeshPhongMaterial({
-        //color: new THREE.Color(colorMix(.65)),
-        color: new THREE.Color(0xffffff),
+         color: new THREE.Color(colorMix(.65)),
+       //color: new THREE.Color(0xffffff),
         transparent: true,
         blending: THREE.NoBlending,
         side: THREE.FrontSide,
@@ -83,7 +83,7 @@ function earthBuffer(img) {//就是那些小方块 map_inverted.png
                 var y = curY;
                 var lat = (y / (canvas.height / 180) - 90) / -1;
                 var lng = x / (canvas.width / 360) - 180;
-                var position = latLongToVector3(lat, lng, consts.globeRadius, -1.3);
+                var position = latLongToVector3(lat, lng, consts.globeRadius, 0.3);
                 globeCloudVerticesArray.push(position);
             }
         }
@@ -109,13 +109,14 @@ function earthBuffer(img) {//就是那些小方块 map_inverted.png
      // side:THREE.FrontSide,
         //blending: THREE.NormalBlending,
        // blending: THREE.AdditiveBlending,
-
+       depthWrite: false,
+       depthTest: false,
         transparent: true,
         opacity: 1,
-
-        blending: THREE.AdditiveBlending,
+      //  color:0x000000,
+        blending: THREE.NoBlending,
         side: THREE.FrontSide,
-        fog: true,
+        fog: false,
         // depthWrite: false,
         // depthTest: false,
       //  renderOrder:3,
@@ -124,10 +125,10 @@ function earthBuffer(img) {//就是那些小方块 map_inverted.png
     var colors = new Float32Array(globeCloudVerticesArray.length * 3);
     var globeCloudColors = [];
     for (var i = 0; i < globeCloudVerticesArray.length; i++) {
-        var tempPercentage = generateRandomNumber(80, 90)*0.02 ;//0 位primary 100位 colorDaraken
-        var shadedColor = colorMix(tempPercentage, consts.colorPri);//修改过
-        //var shadedColor =  0xffffff;
-        globeCloudColors[i] = new THREE.Color(shadedColor);
+        var tempPercentage = generateRandomNumber(80, 90)*0.92 ;//0 位primary 100位 colorDaraken
+       // var shadedColor = colorMix(tempPercentage, consts.colorPri);//修改过
+        var shadedColor =  "#000000";
+        globeCloudColors[i] = new THREE.Color(0x000000);
     }
     for (var i = 0; i < globeCloudVerticesArray.length; i++) {
         colors[i * 3] = globeCloudColors[i].r;

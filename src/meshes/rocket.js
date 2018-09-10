@@ -34,24 +34,24 @@ function initObject() {
         shininess:0,
        // specular: 0x101010,
         reflectivity:0,
-        refractionRation:0,
-       // blending: THREE.NormalBlending     
+       // refractionRation:0,
+      blending: THREE.NoBlending,     
        transparent: true,
-       renderOrder:4       
+
     } ),
         material1 =  new THREE.MeshLambertMaterial(0xffffff);
         material1.transparent = true;
-        material1.renderOrder= 4;
-       // material1.blending =THREE.NormalBlending;       
+ 
+        material1.blending =THREE.NoBlending;       
 
     var materia3 = new THREE.MeshPhongMaterial( { color:0xbf5959 ,//红色装饰
         shininess:10,
        // specular: 0x101010,
         reflectivity:0,
-        refractionRation:0.5,
+      //  refractionRation:0.5,
         transparent:true,
-        renderOrder:4
-      //  blending:THREE.NormalBlending            
+  
+        blending:THREE.NoBlending            
            
     } );
      
@@ -123,9 +123,9 @@ function initFire(){
     var fireGroup = new THREE.Group();
     var material = new THREE.SpriteMaterial( {
         map: new THREE.CanvasTexture( generateSprite() ),
-        blending: THREE.AdditiveBlending,
+        blending: THREE.AdditiveBlending,//火苗需要addictive不知道为什么
         transparent:true,
-        renderOrder:4
+ 
     } );
     for ( var i = 0; i < 200; i++ ) {
 
@@ -254,12 +254,12 @@ function createText(font) {
             shininess:30,
            // specular: 0x101010,
             reflectivity:0,
-            refractionRation:1 ,
-           blending: THREE.NormalBlending , 
+        //    refractionRation:1 ,
+           blending: THREE.NoBlending , 
            transparent:true,
           depthWrite: false,
           depthTest: false,
-          renderOrder:4
+
         
         } );
         var textObj = new THREE.Mesh(gem, mat);
@@ -285,13 +285,13 @@ function createText(font) {
             shininess:30,
            // specular: 0x101010,
             reflectivity:0,
-            refractionRation:1 ,       
+        //    refractionRation:1 ,       
            transparent:true,
 
-            blending: THREE.NormalBlending   ,    
+            blending: THREE.NoBlending   ,    
            depthWrite: false,
            depthTest: false,
-           renderOrder:4
+  
         } );
         var textObj = new THREE.Mesh(gem1, mat);
         textObj.castShadow = true;
@@ -331,7 +331,7 @@ function createText(font) {
 
 function resizeRocket(){
     rocketGroup.scale.x = rocketGroup.scale.y = 0.48;
-    rocketGroup.position.set(-20,0,-800);
+    rocketGroup.position.set(-20,0,300);
 
 }
 export default function createRocket(font){

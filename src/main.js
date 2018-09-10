@@ -14,7 +14,7 @@ import {
     createRings,
     spike,
     createRocket,
-    
+
 } from "./meshes"
 
 import {
@@ -32,9 +32,10 @@ import State from "./util/state"
 let {
     innerWidth: WIDTH,
     innerHeight: HEIGHT
-} = window, {
+} = window,
+ {
     scene,
-    scene1,
+cameraMaxView,
     camera,
     cameraTarget,
     globeMaxZoom,
@@ -42,12 +43,10 @@ let {
     targetCameraZ,
 
     renderer,
-    renderer1,//只用来渲染bufferEarth      
+
 
     rotationObject,
-    rotationObject1,
     earthObject,
-    earthObject1,
     toRAD,
 
     mouse,
@@ -64,7 +63,7 @@ let {
 } = consts,
 container = document.getElementById("interactive"), trackballControls,
     state = new State();
-    rotationObject1
+   // rotationObject1
 
 init();
 
@@ -92,33 +91,29 @@ async function init() {
         "star.jpg", "universe.jpg"
     ];*/
     let earthRotation = setEarthObject();
-    let earthRotation1 = setEarthObject1();
     earthRotation.add(spike());//那个中央环
     
 
     earthRotation.add(innerEarth());
    
     earthRotation.add(earthMap (imgs[3]));
+    earthRotation.add(earthBuffer(imgs[2]));
 
-    earthRotation1.add(earthBuffer (imgs[2]));
  
    
 
     await scene.add(universe(imgs[5]))
-    
+
     await scene.add(createRocket(fonts[2]));
     //   await scene.add(createRsings());
 
     await scene.add(earthRotation);
-    await scene1.add(earthRotation1);
     //  await scene.add(outerEarth(imgs[1]))//地球外面的一些装饰和光
    console.log('ok after add');
-    //await scene.add(createRocket(fonts[2]));
-     earthRotation.position.set(0,0,-4000);
-     earthRotation.scale.x = earthRotation.scale.y =earthRotation.scale.z = 20;
-     earthRotation1.position.set(0,0,-4000);
-     earthRotation1.scale.x = earthRotation1.scale.y =earthRotation1.scale.z = 20;
- 
+   // await scene.add(createRocket(fonts[2]));
+     earthRotation.position.set(0,0,0);
+    // earthRotation.scale.x = earthRotation.scale.y =earthRotation.scale.z = 20;
+
     //    earthRotation.add(innerCore());
 // earthRotation.position.set(0,0,0);
 // earthRotation.scale.x = earthRotation.scale.y =earthRotation.scale.z =   2;
@@ -129,12 +124,6 @@ async function init() {
 // Core.scale.x = Core.scale.y =Core.scale.z =  1;
 
 // scene.add(Core);
-
-
-
-
-
-
 
 
 
@@ -155,19 +144,18 @@ function setScene() {
     console.log(scene)
 
 
-    scene1 = new THREE.Scene();
-    // scene.fog = new THREE.Fog(0x000000, 0, 500);
-     console.log(scene1)
+
 }
 
 function setCamera() {
-    camera = new THREE.PerspectiveCamera(45, WIDTH / HEIGHT, 1, 8000);//这个最大可能会被超就变黑了
+    camera = new THREE.PerspectiveCamera(45, WIDTH / HEIGHT, 1, cameraMaxView);//这个最大可能会被超就变黑了
     camera.position.x = 0;
     camera.position.y = 0;
-    camera.position.z = 2000;
+    camera.position.z = targetCameraZ;
     camera.rotation.x = 0;
     camera.rotation.y = 0;
     camera.rotation.z = 0;
+    console.log(camera.position.z);
  //   console.log("this is ok");
 //console.log('camera aspect:'+camera.aspect);
     //trackballControls = new TrackballControls(camera)
@@ -185,17 +173,15 @@ function setRender() {
     renderer.setClearColor(0x000000, 1);
     container.appendChild(renderer.domElement);
 
-    renderer1 = new THREE.WebGLRenderer({
-        antialias: true,
-        alpha: false
-    });
+
   //
 //  renderer.sortObjects = true;
 
-    renderer1.setSize(WIDTH, HEIGHT);
-    renderer1.setClearColor(0x000000, 1);
-    container.appendChild(renderer1.domElement);
-   //  
+
+   // renderer1.setClearColor(0xFFFFFF, 1.0);
+
+ //   container.appendChild(renderer1.domElement);
+   //
 // //第一个参数是剔除哪个面  CullFaceNone 不剔除 CullFaceBack剔除后面 CullFaceFront 前面 CullFaceFrontBack都
 // //第二个指定顺时针还是逆时针  CCW是 counter-clock-wise逆时针 
 }
@@ -237,7 +223,7 @@ function setLights() {
     light = new THREE.DirectionalLight(0xFFFFFF,0.71);
     light.position.set(0, 0, 1000);
     scene.add(light);
-    scene1.add(light);
+   
 }
 
 
@@ -250,27 +236,9 @@ function setEarthObject() {
     // earthObject = new THREE.Group();
     // earthObject.name = 'earthObject';
     // earthObject.rotation.y = -90 * toRAD;
-
-
     // rotationObject.add(earthObject);
 
     return rotationObject
-
-}
-function setEarthObject1() {
-    rotationObject1 = new THREE.Group();
-    rotationObject1.name = 'rotationObject1';
-    rotationObject1.rotation.x = targetRotationX;
-    rotationObject1.rotation.y = targetRotationY;
-
-    // earthObject1 = new THREE.Group();
-    // earthObject1.name = 'earthObject1';
-    // earthObject1.rotation.y = -90 * toRAD;
-
-
-   // rotationObject1.add(earthObject1);
-
-    return rotationObject1
 
 }
 
@@ -285,10 +253,9 @@ function animate() {
 }
 
 function render() {
-    renderer.render(scene, camera);
-    renderer1.render(scene1,camera);
+ renderer.render(scene, camera);
     TWEEN.update();
- //   renderer1.setFaceCulling(THREE.CullFaceBack,THREE.FrontFaceDirectionCW);//剔除正面或者反面
+   // renderer1.setFaceCulling(THREE.CullFaceBack,THREE.FrontFaceDirectionCW);//剔除正面或者反面
     //trackballControls.update();
     state.update()
     // console.log(scene.getObjectByName("rotationObject"));
@@ -298,27 +265,19 @@ function render() {
     camera.position.z = interpolation(camera.position.z, targetCameraZ, 1);
 
 
-    if (targetRotationX > 75 * toRAD) targetRotationX = 75 * toRAD;
-    if (targetRotationX < -75 * toRAD) targetRotationX = -75 * toRAD;
+    // if (targetRotationX > 75 * toRAD) targetRotationX = 75 * toRAD;
+    // if (targetRotationX < -75 * toRAD) targetRotationX = -75 * toRAD;
 
     if (scene.getObjectByName("rotationObject")) {
-        // rotationObject.rotation.x = interpolation(rotationObject.rotation.x, targetRotationX, .1);
-        // rotationObject.rotation.y = interpolation(rotationObject.rotation.y, targetRotationY, .1);
+
         rotationObject.rotation.y +=0.005;
-    
-    
+
     }
-    if (scene1.getObjectByName("rotationObject1")) {
-        // rotationObject.rotation.x = interpolation(rotationObject.rotation.x, targetRotationX, .1);
-        // rotationObject.rotation.y = interpolation(rotationObject.rotation.y, targetRotationY, .1);
-        rotationObject1.rotation.y +=0.005;
-    
-   //   console.log('rotation！')
-    }
+
 
     if (isMouseDown) return;
   //var globeEarthObject=  scene.getObjectByName("rotationObject")
-   
+
     // //targetRotationY += 0.002
     // rotationObject.rotation.z +=0.1;
     // rotationObject.rotation.y +=0.1;
@@ -339,12 +298,15 @@ function onWindowResize() {
     camera.updateProjectionMatrix();
 
     renderer.setSize(width, height);
-    renderer1.setSize(width,height);
+
 }
 
 function onMouseWheel(event) {
     event.preventDefault();
     targetCameraZ -= event.wheelDeltaY * 0.5;
+    cameraMaxView=targetCameraZ*0.93;//和targetCameraZ一致
+    camera.far = cameraMaxView;//保证能看到的只有半个球
+    camera.updateProjectionMatrix();//更改了camera参数必须使用这个更新
 }
 
 function onMouseDown(event) {
@@ -366,7 +328,8 @@ function onMouseMove(event) {
 
     targetRotationX = targetRotationXOnMouseDown + (mouseY - mouseYOnMouseDown) * .0025;
     targetRotationY = targetRotationYOnMouseDown + (mouseX - mouseXOnMouseDown) * .0025;
-
+    rotationObject.rotation.x = interpolation(rotationObject.rotation.x, targetRotationX, .1);
+    rotationObject.rotation.y = interpolation(rotationObject.rotation.y, targetRotationY, .1);
 
 }
 
