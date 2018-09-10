@@ -50,6 +50,7 @@ cameraMaxView,
     toRAD,
 
     mouse,
+
     mouse: {
         isMouseDown,
         mouseXOnMouseDown,
@@ -58,6 +59,14 @@ cameraMaxView,
         targetRotationY,
         targetRotationXOnMouseDown,
         targetRotationYOnMouseDown
+    },
+    touch,
+    touch:{
+        isTouchDown,
+        touchXOnTouchDown,
+        touchYOnTouchDown,
+        targetRotationXOnTouchDown,
+        targetRotationYOnTouchDown
     }
 
 } = consts,
@@ -74,6 +83,11 @@ document.getElementById("interactive").addEventListener('mousedown', onMouseDown
 document.getElementById("interactive").addEventListener('mousemove', onMouseMove, false);
 document.getElementById("interactive").addEventListener('mouseup', onMouseUp, false);
 document.getElementById("interactive").addEventListener('mouseleave', onMouseLeave, false);
+
+document.getElementById("interactive").addEventListener('touchstart', onTouchDown, false);
+document.getElementById("interactive").addEventListener('touchmove', onTouchMove, false);
+document.getElementById("interactive").addEventListener('touchend', onTouchLeave, false);
+document.getElementById("interactive").addEventListener('touchcancel', onTouchUp, false);
 async function init() {
     let cacheF = cacheImages();
     let cacheF1 = cacheFonts();
@@ -342,5 +356,34 @@ function onMouseLeave(event) {
     event.preventDefault();
     if (isMouseDown) {
         isMouseDown = false;
+    }
+}
+
+function onTouchDown(event){
+	event.preventDefault();
+		isTouchDown = true;
+
+		touchXOnTouchDown = event.clientX - WIDTH/2;//对应原点在中心的坐标系
+		touchYOnTouchDown = event.clientY - HEIGHT/2;
+		targetRotationXOnTouchDown = targetRotationX;
+		targetRotationYOnTouchDown = targetRotationY;
+
+}
+function onTouchMove(event){
+	if(!isTouchDown) return
+	let touchX = event.clientX - WIDTH/2;
+	let touchY = event.clientY - HEIGHT/2;
+	targetRotationX = targetRotationXOnTouchDown + (touchX - touchXOnTouchDown) * .0025;//后半部分是偏移的，从按下到每次移动的点
+    targetRotationY = targetRotationYOnTouchDown + (touchY - touchYOnTouchDown) * .0025;
+}
+function onTouchUp(event) {
+    event.preventDefault();
+    isTouchDown = false;
+}
+
+function onTouchLeave(event) {
+    event.preventDefault();
+    if (isTouchDown) {
+        isTouchDown = false;
     }
 }

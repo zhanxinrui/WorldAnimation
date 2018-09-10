@@ -48,6 +48,13 @@ window.consts = {
         minDistance:100,
         number:500,
         size:2,
+    },
+    touch:{
+        isTouchDown:false,
+        touchXOnTouchDown:0,
+        touchYOnTouchDown:0,
+        targetRotationXOnTouchDown:0,
+        targetRotationYOnTouchDown:0
     }
 }
 
