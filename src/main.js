@@ -91,7 +91,7 @@ async function init() {
         "star.jpg", "universe.jpg"
     ];*/
     let earthRotation = setEarthObject();
-    earthRotation.add(spike());//那个中央环
+
     
 
     earthRotation.add(innerEarth());
@@ -106,7 +106,7 @@ async function init() {
 
     await scene.add(createRocket(fonts[2]));
     //   await scene.add(createRsings());
-
+    earthRotation.add(spike());//那个中央环
     await scene.add(earthRotation);
     //  await scene.add(outerEarth(imgs[1]))//地球外面的一些装饰和光
    console.log('ok after add');

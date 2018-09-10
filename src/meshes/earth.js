@@ -181,7 +181,7 @@ function outerEarth(img) {
 function spike() {
     let spikesObject, spikesVerticesArray = [],
         spikesMaterial, spikesBufferGeometry, spikesMesh,
-        spikeRadius = consts.globeRadius + 30,
+        spikeRadius = consts.globeRadius + 25,
         sphereSpikeRadius = consts.globeRadius + 40;
 
     spikesObject = new THREE.Group();
@@ -193,7 +193,7 @@ function spike() {
     for (i = 0; i < spikeTotal; i++) {
         var vertex1 = new THREE.Vector3();
         vertex1.x = spikeRadius * Math.cos(spikeAngle * i);
-        vertex1.y = 0;
+        vertex1.y = 90;
         vertex1.z = spikeRadius * Math.sin(spikeAngle * i);
         vertex1.normalize();
         vertex1.multiplyScalar(spikeRadius);
