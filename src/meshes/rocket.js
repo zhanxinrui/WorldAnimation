@@ -331,7 +331,7 @@ function createText(font) {
 
 function resizeRocket(){
     rocketGroup.scale.x = rocketGroup.scale.y = 0.48;
-    rocketGroup.position.set(-20,0,300);
+    rocketGroup.position.set(-20,-160,300);
 
 }
 export default function createRocket(font){

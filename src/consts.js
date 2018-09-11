@@ -11,7 +11,7 @@ window.consts = {
     // globeMinZoom: 5000,
     // targetCameraZ: 2000,
     globeMaxZoom: 300,
-    globeMinZoom: 3000,
+    globeMinZoom: 2500,
     targetCameraZ: 1500,
     cameraMaxView:1500*0.9,//和targetCameraZ一致
     globeRadius: 500,
@@ -54,7 +54,9 @@ window.consts = {
         touchXOnTouchDown:0,
         touchYOnTouchDown:0,
         targetRotationXOnTouchDown:0,
-        targetRotationYOnTouchDown:0
+        targetRotationYOnTouchDown:0,
+        touchDisOnTouchMove:0,
+        touchDisOnTouchDown:0
     }
 }
 

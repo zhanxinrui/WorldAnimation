@@ -5,7 +5,7 @@ Body - General Layout Structure
 body {
 	margin: 0;
 	padding: 0;
-	background-color: #000000;
+	/* background-color: #000000; */
 	font: 18px/20px 'blender_promedium', Verdana, Arial, geneva, sans-serif;
 	text-align: left;
 	color: #0082a2;
@@ -149,6 +149,8 @@ GENERIC STUFF
 			width: 100%;
 			min-width: 480px;
 			overflow: hidden;
+			background: url(../assets/universe.jpg);
+
 			}
 
 		#tooltip {

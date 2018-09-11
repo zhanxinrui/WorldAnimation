@@ -66,7 +66,9 @@ cameraMaxView,
         touchXOnTouchDown,
         touchYOnTouchDown,
         targetRotationXOnTouchDown,
-        targetRotationYOnTouchDown
+        targetRotationYOnTouchDown,
+        touchDisOnTouchDown,
+        touchDisOnTouchMove
     }
 
 } = consts,
@@ -122,7 +124,7 @@ async function init() {
     //   await scene.add(createRsings());
     earthRotation.add(spike());//那个中央环
     await scene.add(earthRotation);
-    //  await scene.add(outerEarth(imgs[1]))//地球外面的一些装饰和光
+      await scene.add(outerEarth(imgs[1]))//地球外面的一些装饰和光
    console.log('ok after add');
    // await scene.add(createRocket(fonts[2]));
      earthRotation.position.set(0,0,0);
@@ -184,7 +186,7 @@ function setRender() {
 //  renderer.sortObjects = true;
 
     renderer.setSize(WIDTH, HEIGHT);
-    renderer.setClearColor(0x000000, 1);
+    renderer.setClearColor(0xffffff, 0);  //
     container.appendChild(renderer.domElement);
 
 
@@ -234,7 +236,7 @@ function setLights() {
     // lightShield3.name = 'lightShield3';
     // scene.add(lightShield3);
 
-    light = new THREE.DirectionalLight(0xFFFFFF,0.71);
+    light = new THREE.DirectionalLight(0xFFFFFF,0.91);
     light.position.set(0, 0, 1000);
     scene.add(light);
    
@@ -323,13 +325,15 @@ function onMouseWheel(event) {
     camera.updateProjectionMatrix();//更改了camera参数必须使用这个更新
 }
 
+
 function onMouseDown(event) {
     event.preventDefault();
     isMouseDown = true;
 
     mouseXOnMouseDown = event.clientX - WIDTH / 2;
     mouseYOnMouseDown = event.clientY - HEIGHT / 2;
-
+    console.log('event.clientX:',event.clientX);
+    console.log('event.clientY',event.clientY);
     targetRotationXOnMouseDown = targetRotationX;
     targetRotationYOnMouseDown = targetRotationY;
 }
@@ -350,6 +354,7 @@ function onMouseMove(event) {
 function onMouseUp(event) {
     event.preventDefault();
     isMouseDown = false;
+    console.log('mouseup');
 }
 
 function onMouseLeave(event) {
@@ -357,28 +362,85 @@ function onMouseLeave(event) {
     if (isMouseDown) {
         isMouseDown = false;
     }
+    console.log('mouseleave');
 }
+
+function onTouchScale(scaleDis) {
+    targetCameraZ -= scaleDis * 0.3;
+    cameraMaxView=targetCameraZ*0.93;//和targetCameraZ一致
+    camera.far = cameraMaxView;//保证能看到的只有半个球
+    camera.updateProjectionMatrix();//更改了camera参数必须使用这个更新
+}
+
 
 function onTouchDown(event){
 	event.preventDefault();
 		isTouchDown = true;
 
-		touchXOnTouchDown = event.clientX - WIDTH/2;//对应原点在中心的坐标系
-		touchYOnTouchDown = event.clientY - HEIGHT/2;
+		touchXOnTouchDown = event.changedTouches[0].clientX - WIDTH/2;//对应原点在中心的坐标系
+		touchYOnTouchDown = event.changedTouches[0].clientY - HEIGHT/2;
 		targetRotationXOnTouchDown = targetRotationX;
-		targetRotationYOnTouchDown = targetRotationY;
-
+        targetRotationYOnTouchDown = targetRotationY;
+      //  console.log('event.clientX:',event.changedTouches[0].clientX);
+      //  console.log('event.clientY',event.changedTouches[0].clientY);
+    //处理缩放
+    touchDisOnTouchDown = 0;
+    console.log('touch count',event.touches.length);
+    if(event.touches.length>=2){
+        
+        for(let i = 1 ;i < event.touches.length; i++){
+            //计算距离
+            touchDisOnTouchDown +=Math.pow( Math.pow(event.touches[i].clientX-event.touches[i-1].clientX,2)+Math.pow(event.touches[i].clientY-event.touches[i-1].clientY,2),0.5);
+            //console.log('event.touches[i-1].clientX',event.touches[i-1].clientX);
+            console.log('down: event.touches[i].clientX',(event.touches[i].clientX));
+        }
+        
+        console.log('whats"s wrong');
+        console.log('touchDisOnTouchDown',touchDisOnTouchDown);
+    }
+    console.log('touchDown');
+ 
+ 
+  //  console.log('targetRotationXOnTouchDown:',targetRotationXOnTouchDown);
+   // console.log('targetRotationYOnTouchDown',targetRotationYOnTouchDown);
+   
 }
 function onTouchMove(event){
-	if(!isTouchDown) return
-	let touchX = event.clientX - WIDTH/2;
-	let touchY = event.clientY - HEIGHT/2;
-	targetRotationX = targetRotationXOnTouchDown + (touchX - touchXOnTouchDown) * .0025;//后半部分是偏移的，从按下到每次移动的点
-    targetRotationY = targetRotationYOnTouchDown + (touchY - touchYOnTouchDown) * .0025;
+    if(!isTouchDown) return
+    if(event.touches.length==1){
+	let touchX = event.changedTouches[0].clientX - WIDTH/2;
+	let touchY = event.changedTouches[0].clientY - HEIGHT/2;
+	targetRotationX = targetRotationXOnTouchDown + (touchY - touchYOnTouchDown) * .0065;//后半部分是偏移的，从按下到每次移动的点
+    targetRotationY = targetRotationYOnTouchDown + (touchX - touchXOnTouchDown) * .0065;
+    // console.log('targetRotationXOnTouchDown:',targetRotationXOnTouchDown);
+    // console.log('targetRotationYOnTouchDown',targetRotationYOnTouchDown);
+    // console.log('targetRotationX',targetRotationX);
+    // console.log('targetRotationY',targetRotationY);
+    rotationObject.rotation.x = interpolation(rotationObject.rotation.x, targetRotationX, .1);
+    rotationObject.rotation.y = interpolation(rotationObject.rotation.y, targetRotationY, .1);
+  //  console.log('rotationObject.rotation.x ',rotationObject.rotation.x );
+  //  console.log(' rotationObject.rotation.y ', rotationObject.rotation.y );
+    console.log('touchmove')
+    }
+    //处理缩放问题
+    if(event.touches.length>=2 && isTouchDown){//必须大于两个点并且正在触摸，否则失去意义
+        touchDisOnTouchMove = 0 ;
+        for(let i = 1 ;i < event.touches.length; i++){
+            //计算距离
+            touchDisOnTouchMove  +=Math.pow( Math.pow(event.touches[i].clientX-event.touches[i-1].clientX,2)+Math.pow(event.touches[i].clientY-event.touches[i-1].clientY,2),0.5);
+            console.log('move: (event.touches[i].clientX:',event.touches[i].clientX);
+        }
+        onTouchScale(touchDisOnTouchMove-touchDisOnTouchDown);
+    }
+    
+    console.log('move count',event.touches.length);
+    console.log('touchDisOnTouchMove',touchDisOnTouchMove);
+
 }
 function onTouchUp(event) {
     event.preventDefault();
     isTouchDown = false;
+console.log('touchup');
 }
 
 function onTouchLeave(event) {
@@ -386,4 +448,5 @@ function onTouchLeave(event) {
     if (isTouchDown) {
         isTouchDown = false;
     }
+    console.log('touchleave');
 }

@@ -193,7 +193,7 @@ function spike() {
     for (i = 0; i < spikeTotal; i++) {
         var vertex1 = new THREE.Vector3();
         vertex1.x = spikeRadius * Math.cos(spikeAngle * i);
-        vertex1.y = 90;
+        vertex1.y = 40;
         vertex1.z = spikeRadius * Math.sin(spikeAngle * i);
         vertex1.normalize();
         vertex1.multiplyScalar(spikeRadius);
