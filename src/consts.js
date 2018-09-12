@@ -31,11 +31,12 @@ window.consts = {
 
         mouseXOnMouseDown: 0,
         mouseYOnMouseDown: 0,
-
         targetRotationX: .45,  //初始旋转x弧度
         targetRotationY: 0,
         targetRotationXOnMouseDown: 0,
-        targetRotationYOnMouseDown: 0
+        targetRotationYOnMouseDown: 0,
+        mouseXOnWorldCS:0, //世界坐标系下的x,y坐标
+        mouseYOnWorldCS:0
     },
 
     lights: {

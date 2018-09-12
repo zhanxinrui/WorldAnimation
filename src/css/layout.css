@@ -10,6 +10,8 @@ body {
 	text-align: left;
 	color: #0082a2;
 	overflow: hidden;
+	/* background-image: url("../assets/universe.jpg"); */
+	/* background-color: red; */
 	}
 	/*
 	#fps {
@@ -149,8 +151,7 @@ GENERIC STUFF
 			width: 100%;
 			min-width: 480px;
 			overflow: hidden;
-			background: url(../assets/universe.jpg);
-
+			/* background:red; */
 			}
 
 		#tooltip {

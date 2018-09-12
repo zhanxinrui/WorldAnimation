@@ -33,7 +33,9 @@ function innerEarth() {
         depthTest: false,
    //     renderOrder:1
     });
-    return new THREE.Mesh(_geometry, _material)
+    let obj = new THREE.Mesh(_geometry, _material);
+    obj.name =  "innerEarth";
+    return obj;
 }
 
 /*    let images = ["dot-inverted.png", "earth-glow.jpg",
@@ -59,7 +61,9 @@ function earthMap(img) {//map.png
       //  renderOrder:2,
     });
     _material.needsUpdate = true;
-    return new THREE.Mesh(_geometry1, _material)
+    let obj = new THREE.Mesh(_geometry1, _material);
+    obj.name = "earthMapEdge";
+    return obj
 }
 
 function earthBuffer(img) {//就是那些小方块 map_inverted.png
@@ -100,7 +104,7 @@ function earthBuffer(img) {//就是那些小方块 map_inverted.png
 
     // COLOR CHECKERED
     let globeCloudMaterial = new THREE.PointsMaterial({
-        size: 0.75,
+        size: 8.75,
         fog: true,
         vertexColors: THREE.VertexColors,
       //  transparent:false,
@@ -141,7 +145,7 @@ function earthBuffer(img) {//就是那些小方块 map_inverted.png
 
     globeCloud = new THREE.Points(globeCloudBufferGeometry, globeCloudMaterial);
     globeCloud.sortParticles = true;
-    globeCloud.name = 'globeCloud';
+    globeCloud.name = 'globeCloudSquare';
     return globeCloud
 }
 
@@ -232,6 +236,7 @@ function spike() {
     spikesBufferGeometry = new THREE.BufferGeometry();
     spikesBufferGeometry.addAttribute('position', new THREE.BufferAttribute(positions, 3));
     spikesMesh = new THREE.LineSegments(spikesBufferGeometry, spikesMaterial);
+    spikesMesh.name = "centerRing";
     spikesObject.add(spikesMesh);
 
     return spikesObject
@@ -245,3 +250,6 @@ export {
     spike,
    // innerCore
 }
+
+
+
