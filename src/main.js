@@ -80,6 +80,8 @@ cameraMaxView,
         targetRotationYOnTouchDown,
         touchDisOnTouchDown,
         touchDisOnTouchMove,
+        touchXOnWorldCS,
+        touchYOnWorldCS
 
     },
 
@@ -104,8 +106,8 @@ document.getElementById("interactive").addEventListener('mouseleave', onMouseLea
 
 document.getElementById("interactive").addEventListener('touchstart', onTouchDown, false);
 document.getElementById("interactive").addEventListener('touchmove', onTouchMove, false);
-document.getElementById("interactive").addEventListener('touchend', onTouchLeave, false);
-document.getElementById("interactive").addEventListener('touchcancel', onTouchUp, false);
+document.getElementById("interactive").addEventListener('touchcancel', onTouchLeave, false);
+document.getElementById("interactive").addEventListener('touchend', onTouchUp, false);
 async function init() {
 
     let cacheF = cacheImages();
@@ -412,7 +414,7 @@ function onMouseUp(event) {
         //根据照相机，把这个向量转换到视点坐标系
         var vectorUp = new THREE.Vector2(mouseXOnMouseUp,mouseYOnMouseUp);
         var vectorDown = new THREE.Vector2(mouseXOnWorldCS,mouseYOnWorldCS);
-        var vectorUp = new THREE.Vector3(mouseXOnMouseUp,mouseYOnMouseUp,0.5);
+       // var vectorUp = new THREE.Vector3(mouseXOnMouseUp,mouseYOnMouseUp,0.5);
         // console.log("unproject",THREE.Vector3.unproject);
         // vectorUp = vectorUp.unproject(camera);
         // var vectorDown = new THREE.Vector2(mouseXOnWorldCS,mouseYOnWorldCS,0.5).unproject(camera);
@@ -488,7 +490,8 @@ function onTouchDown(event){
  
   //  console.log('targetRotationXOnTouchDown:',targetRotationXOnTouchDown);
    // console.log('targetRotationYOnTouchDown',targetRotationYOnTouchDown);
-   
+   touchXOnWorldCS = (event.changedTouches[0].clientX/WIDTH)*2-1;
+   touchYOnWorldCS = -(event.changedTouches[0].clientY/HEIGHT)*2+1;
 }
 function onTouchMove(event){
     if(!isTouchDown) return
@@ -523,9 +526,39 @@ function onTouchMove(event){
 
 }
 function onTouchUp(event) {
+    console.log("event",event);
     event.preventDefault();
     isTouchDown = false;
-console.log('touchup');
+    console.log('touchup');
+    //检测按下登录键  按下和弹起时都在火箭主体内就可以
+    console.log('up x',event.changedTouches[0].clientX);
+    console.log('up y',event.changedTouches[0].clientY);
+    let touchXOnTouchUp = (event.changedTouches[0].clientX/WIDTH)*2-1;
+    let touchYOnTouchUp = -(event.changedTouches[0].clientY/HEIGHT)*2+1;
+    var vectorUp = new THREE.Vector2(touchXOnTouchUp,touchYOnTouchUp);
+    var vectorDown = new THREE.Vector2(touchXOnWorldCS,touchYOnWorldCS);
+    console.log(vectorUp);
+    console.log(vectorDown);
+    var raycasterDown = new THREE.Raycaster();
+    var raycasterUp = new THREE.Raycaster();
+    raycasterUp.setFromCamera(vectorUp,camera);
+    raycasterDown.setFromCamera(vectorDown,camera);
+
+        //射线和模型求交，选中一系列直线
+            var intersectsUp = raycasterUp.intersectObjects(rocketObj.children);//不知道为什么用scene就是识别不了rocketOBj
+            var intersectsDown = raycasterDown.intersectObjects(rocketObj.children);
+             console.log('scene.children',rocketObj.children);
+             console.log( intersectsUp);
+             console.log(intersectsDown);
+            // console.log("当前点击（x,y）:",event.clientX,event.clientY);
+            // console.log("火箭位置(x,y):",rocketObj.position.x,rocketObj.position.y);
+        if (intersectsDown.length>0 && intersectsUp.length>0 ) {
+                //'选中第一个射线相交的物体'
+            var  SELECTED = intersectsUp[0].object;
+                //var intersected = intersects[0].object;
+                console.log('intersectsUp[0]',intersectsUp[0].object)
+            }
+
 }
 
 function onTouchLeave(event) {

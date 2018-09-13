@@ -56,7 +56,9 @@ window.consts = {
         targetRotationXOnTouchDown:0,
         targetRotationYOnTouchDown:0,
         touchDisOnTouchMove:0,
-        touchDisOnTouchDown:0
+        touchDisOnTouchDown:0,
+        touchXOnWorldCS:0,
+        touchYOnWorldCS:0
     }
 }
 
