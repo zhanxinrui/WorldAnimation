@@ -5,6 +5,8 @@ import "./css/socialicons.css"
 import * as fp from "lodash/fp"
 import * as THREE from "three";
 import consts from "./consts";
+// import projector  from"./util/Projector"; 
+
 // import {dataMap} from "./dataMap";
 // import {checkDistance}from "./threed";
 import {
@@ -136,11 +138,12 @@ async function init() {
     earthRotation.add(earthMap (imgs[3]));//每个img都是一个dom元素，传进去通过.src获取路径
     earthRotation.add(earthBuffer(imgs[2]));
 
- 
+    
    
 
   //  await scene.add(universe(imgs[5]))
-    rocketObj = createRocket(fonts[2])
+    rocketObj = createRocket(fonts[2]);
+    rocketObj.name = "Rocket";
 //ARCROCKET
 
 
@@ -404,25 +407,36 @@ function onMouseUp(event) {
     //检测按下登录键  按下和弹起时都在火箭主体内就可以
     let mouseXOnMouseUp = (event.clientX/WIDTH)*2-1;
     let mouseYOnMouseUp = -(event.clientY/HEIGHT)*2+1;
+    // let mouseXOnMouseUp =  event.clientX - WIDTH / 2;
+    // let mouseYOnMouseUp =  event.clientY - HEIGHT / 2;
         //根据照相机，把这个向量转换到视点坐标系
         var vectorUp = new THREE.Vector2(mouseXOnMouseUp,mouseYOnMouseUp);
         var vectorDown = new THREE.Vector2(mouseXOnWorldCS,mouseYOnWorldCS);
+        var vectorUp = new THREE.Vector3(mouseXOnMouseUp,mouseYOnMouseUp,0.5);
+        // console.log("unproject",THREE.Vector3.unproject);
+        // vectorUp = vectorUp.unproject(camera);
+        // var vectorDown = new THREE.Vector2(mouseXOnWorldCS,mouseYOnWorldCS,0.5).unproject(camera);
+        // vectorDown  = vectorDown.unproject(camera); 
         var raycasterDown = new THREE.Raycaster();
         var raycasterUp = new THREE.Raycaster();
+        // var raycasterDown = new THREE.Raycaster(camera.position,vectorDown.sub(camera.position).normalize());
+        // var raycasterUp = new THREE.Raycaster(camera.position,vectorUp.sub(camera.position).normalize());
         //在视点坐标系中形成射线,射线的起点向量是照相机， 射线的方向向量是照相机到点击的点，这个向量应该归一标准化。
        raycasterUp.setFromCamera(vectorUp,camera);
        raycasterDown.setFromCamera(vectorDown,camera);
 
       //  var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
         //射线和模型求交，选中一系列直线
-            var intersectsUp = raycasterUp.intersectObjects(scene.children);
-            var intersectsDown = raycasterDown.intersectObjects(scene.children);
-            console.log('scene.children',scene.children);
-            console.log( intersectsUp);
-            console.log(intersectsDown);
-        if (intersectsUp.length > 0 && intersectsDown.length > 0 && intersectsUp[0].name =='rocketObj' && intersectsDown[0].name== 'rocketObj' ) {
+            var intersectsUp = raycasterUp.intersectObjects(rocketObj.children);//不知道为什么用scene就是识别不了rocketOBj
+            var intersectsDown = raycasterDown.intersectObjects(rocketObj.children);
+            // console.log('scene.children',rocketObj.children);
+            // console.log( intersectsUp[0]);
+            // console.log(intersectsDown);
+            // console.log("当前点击（x,y）:",event.clientX,event.clientY);
+            // console.log("火箭位置(x,y):",rocketObj.position.x,rocketObj.position.y);
+        if (intersectsDown.length>0 && intersectsUp.length>0 ) {
                 //'选中第一个射线相交的物体'
-                SELECTED = intersectsUp[0].object;
+              var  SELECTED = intersectsUp[0].object;
                 //var intersected = intersects[0].object;
                 console.log('intersectsUp[0]',intersectsUp[0].object)
             }
