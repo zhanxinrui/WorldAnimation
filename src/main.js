@@ -5,6 +5,8 @@ import "./css/socialicons.css"
 import * as fp from "lodash/fp"
 import * as THREE from "three";
 import consts from "./consts";
+// import {dataMap} from "./dataMap";
+// import {checkDistance}from "./threed";
 import {
     innerEarth,
     earthMap,
@@ -23,7 +25,9 @@ import {
     cacheFonts,
     colorMix,
     interpolation,
-    TWEEN
+    TWEEN,
+    latLongToVector3
+
 } from "./util";
 import TrackballControls from "./util/TrackballControls";
 
@@ -46,6 +50,9 @@ cameraMaxView,
 
 
     rotationObject,
+
+
+    globeRadius,
     earthObject,
     toRAD,
 
@@ -58,7 +65,9 @@ cameraMaxView,
         targetRotationX,
         targetRotationY,
         targetRotationXOnMouseDown,
-        targetRotationYOnMouseDown
+        targetRotationYOnMouseDown,
+        mouseXOnWorldCS, //世界坐标系下的x,y坐标
+        mouseYOnWorldCS
     },
     touch,
     touch:{
@@ -68,12 +77,17 @@ cameraMaxView,
         targetRotationXOnTouchDown,
         targetRotationYOnTouchDown,
         touchDisOnTouchDown,
-        touchDisOnTouchMove
-    }
+        touchDisOnTouchMove,
+
+    },
+
 
 } = consts,
+
 container = document.getElementById("interactive"), trackballControls,
+
     state = new State();
+    var rocketObj;
    // rotationObject1
 
 init();
@@ -91,11 +105,18 @@ document.getElementById("interactive").addEventListener('touchmove', onTouchMove
 document.getElementById("interactive").addEventListener('touchend', onTouchLeave, false);
 document.getElementById("interactive").addEventListener('touchcancel', onTouchUp, false);
 async function init() {
+
     let cacheF = cacheImages();
     let cacheF1 = cacheFonts();
     
     let imgs = await cacheF();
-    
+    // container.style.background = imgs[5];
+    // document.getElementsByTagName('body').setAttribute('backgoround', 'red');
+  // container.style.background =url()
+    let universeUrl = imgs[5];
+    console.log("地址：", 'background: url('+universeUrl.src+') top  fixed no-repeat; background-size:40px 40px ');
+    container.setAttribute('style', 'background: url('+universeUrl.src+')center  fixed no-repeat;  ');
+
     let _initStage = fp.flow(setScene, setCamera, setRender, setLights, animate);
     
     _initStage();
@@ -112,15 +133,19 @@ async function init() {
 
     earthRotation.add(innerEarth());
    
-    earthRotation.add(earthMap (imgs[3]));
+    earthRotation.add(earthMap (imgs[3]));//每个img都是一个dom元素，传进去通过.src获取路径
     earthRotation.add(earthBuffer(imgs[2]));
 
  
    
 
-    await scene.add(universe(imgs[5]))
+  //  await scene.add(universe(imgs[5]))
+    rocketObj = createRocket(fonts[2])
+//ARCROCKET
 
-    await scene.add(createRocket(fonts[2]));
+
+
+    await scene.add(rocketObj);
     //   await scene.add(createRsings());
     earthRotation.add(spike());//那个中央环
     await scene.add(earthRotation);
@@ -148,7 +173,6 @@ async function init() {
 
 
 
-  //  await scene.add(rocketObj(fonts[2]));
 
 
 
@@ -180,7 +204,7 @@ function setCamera() {
 function setRender() {
     renderer = new THREE.WebGLRenderer({
         antialias: true,
-        alpha: false
+        alpha: true //透明的话，画布就可以可以显示出css
     });
   //
 //  renderer.sortObjects = true;
@@ -329,13 +353,34 @@ function onMouseWheel(event) {
 function onMouseDown(event) {
     event.preventDefault();
     isMouseDown = true;
-
+        //将鼠标点击位置的屏幕坐标转成threejs中的标准坐标,具体解释见代码释义
     mouseXOnMouseDown = event.clientX - WIDTH / 2;
     mouseYOnMouseDown = event.clientY - HEIGHT / 2;
     console.log('event.clientX:',event.clientX);
     console.log('event.clientY',event.clientY);
     targetRotationXOnMouseDown = targetRotationX;
     targetRotationYOnMouseDown = targetRotationY;
+    
+    
+    //在世界坐标系下的按下坐标
+    mouseXOnWorldCS = (event.clientX/WIDTH)*2-1;
+    mouseYOnWorldCS = -(event.clientY/HEIGHT)*2+1;
+     
+  /*  推导过程：
+    设A点为点击点(x1,y1),x1=e.clintX, y1=e.clientY
+    设A点在世界坐标中的坐标值为B(x2,y2);
+    
+    由于A点的坐标值的原点是以屏幕左上角为(0,0);
+    我们可以计算可得以屏幕中心为原点的B'值
+    x2' = x1 - innerWidth/2
+    y2' = innerHeight/2 - y1
+    又由于在世界坐标的范围是[-1,1],要得到正确的B值我们必须要将坐标标准化
+    x2 = (x1 -innerWidth/2)/(innerwidth/2) = (x1/innerWidth)*2-1
+    同理得 y2 = -(y1/innerHeight)*2 +1*/
+
+
+   
+    
 }
 
 function onMouseMove(event) {
@@ -355,6 +400,32 @@ function onMouseUp(event) {
     event.preventDefault();
     isMouseDown = false;
     console.log('mouseup');
+
+    //检测按下登录键  按下和弹起时都在火箭主体内就可以
+    let mouseXOnMouseUp = (event.clientX/WIDTH)*2-1;
+    let mouseYOnMouseUp = -(event.clientY/HEIGHT)*2+1;
+        //根据照相机，把这个向量转换到视点坐标系
+        var vectorUp = new THREE.Vector2(mouseXOnMouseUp,mouseYOnMouseUp);
+        var vectorDown = new THREE.Vector2(mouseXOnWorldCS,mouseYOnWorldCS);
+        var raycasterDown = new THREE.Raycaster();
+        var raycasterUp = new THREE.Raycaster();
+        //在视点坐标系中形成射线,射线的起点向量是照相机， 射线的方向向量是照相机到点击的点，这个向量应该归一标准化。
+       raycasterUp.setFromCamera(vectorUp,camera);
+       raycasterDown.setFromCamera(vectorDown,camera);
+
+      //  var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
+        //射线和模型求交，选中一系列直线
+            var intersectsUp = raycasterUp.intersectObjects(scene.children);
+            var intersectsDown = raycasterDown.intersectObjects(scene.children);
+            console.log('scene.children',scene.children);
+            console.log( intersectsUp);
+            console.log(intersectsDown);
+        if (intersectsUp.length > 0 && intersectsDown.length > 0 && intersectsUp[0].name =='rocketObj' && intersectsDown[0].name== 'rocketObj' ) {
+                //'选中第一个射线相交的物体'
+                SELECTED = intersectsUp[0].object;
+                //var intersected = intersects[0].object;
+                console.log('intersectsUp[0]',intersectsUp[0].object)
+            }
 }
 
 function onMouseLeave(event) {

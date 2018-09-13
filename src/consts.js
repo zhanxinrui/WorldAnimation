@@ -10,8 +10,8 @@ window.consts = {
     // globeMaxZoom: 70,
     // globeMinZoom: 5000,
     // targetCameraZ: 2000,
-    globeMaxZoom: 300,
-    globeMinZoom: 2500,
+    globeMaxZoom: 1000,//无论如何镜头距离底面都比这个值大
+    globeMinZoom: 3000,
     targetCameraZ: 1500,
     cameraMaxView:1500*0.9,//和targetCameraZ一致
     globeRadius: 500,
