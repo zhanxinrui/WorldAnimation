@@ -1,7 +1,4 @@
 import dataMap from "../dataMap";
-console.log('datamap');
-console.log('dataMap',dataMap);
-
 import * as THREE from "three";
 import {
     colorMix,
@@ -14,7 +11,6 @@ var globeCityNames = new THREE.Group();//name group //因为异步所以放前�
 var globeCitys = new THREE.Group();//city的总group
 //创建城市group
 function createCitys(font){
- //   console.log('in');
     let globeCityBufferGeometry = new THREE.BufferGeometry();
     let globeCityVertices = [];
 	  for ( i = 0; i < dataMap.length-1; i ++ ) {
@@ -22,14 +18,7 @@ function createCitys(font){
 	  		lng = dataMap[i][3],
 	  		position = latLongToVector3(lat,lng,consts.globeRadius, 0.3);
 	  		globeCityVertices.push(position);
-          //  console.log('dataMap',dataMap);
-              //调用文字创建
-            //   let textObj ;
-        //   if(i <= 1)  
-        //      createText(font,dataMap[i][4] ,position);
-            // console.log('textObj',textObj);
-            
-	  		//globeCityNames.add(textObj);
+
 	  }
 	var positions = new Float32Array(globeCityVertices.length * 3);
     for (var i = 0; i < globeCityVertices.length; i++) {
@@ -60,9 +49,6 @@ var colors = new Float32Array(globeCityVertices.length*3);
 var globeCityColors = [];
 //可以通过改变颜色或者大小来改变显示效果
  for (var i = 0; i < globeCityVertices.length; i++) {
-        //var tempPercentage = generateRandomNumber(80, 90)*0.92 ;//0 位primary 100位 colorDaraken
-       // var shadedColor = colorMix(tempPercentage, consts.colorPri);//修改过
-       // var shadedColor =  "#000000";
         globeCityColors[i] = new THREE.Color(0xfffff00);
     }
   for (var i = 0; i < globeCityVertices.length; i++) {
@@ -109,21 +95,16 @@ function createText(font,cName,position) {
           depthWrite: false,
           depthTest: false,
         } );
-      //  console.log('gem',gem,'mat',mat);
         
    
          textObj = new THREE.Mesh(gem, mat);
-      //  console.log("texObj in func",textObj);
         textObj.castShadow = true;
         textObj.position.set(position.x,position.y,position.z);
         textObj.name = cName;
         globeCityNames.add(textObj);
-        // rocketGroup.add(textObj);
-     //   textObj.rotation.z = Math.PI*1/2;
-     //return textObj;
+
     });//不懂为什么要用回调函数
   
-   // return text
-  
+
 
 }

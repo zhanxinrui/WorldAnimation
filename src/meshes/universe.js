@@ -20,7 +20,6 @@ function universe(img){
 
     _mesh=new THREE.Mesh( _geometry, _material );
     _mesh.position.z = -1000;
-   // _mesh.scale.x
     _mesh.scale.x = _mesh.scale.y = 3;
 
     _mesh.name = 'universeBgMesh';

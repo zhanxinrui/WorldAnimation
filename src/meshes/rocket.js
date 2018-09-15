@@ -23,12 +23,7 @@ function initObject() {
         holderGeometry =  new THREE.CylinderBufferGeometry( 20.5,10.5,25,100),//底部喷嘴
         panelGeometry = new THREE.CylinderBufferGeometry( 12.5,1.5,25,100);//三个翼片
         panelGeometry.thetaLength = Math.PI*87.5/180;
-        panelGeometry.thetaStart = Math.PI*45/180; 
-       
-
-       // var geometry  =new  THREE.ConeGeometry(30,50,8,1);
-       // var geometry  = new THREE.ConeGeometry(100,100,100,10,newfalse,0,Math.PI*3/2)
-
+        panelGeometry.thetaStart = Math.PI*45/180;
     //material
     var material = new THREE.MeshPhongMaterial( { color:0xffffff,//用于机身
         shininess:0,
@@ -136,10 +131,6 @@ function initFire(){
     
         }
         return fireGroup;
-    // var fireGroup1 =fireGroup.clone();
-    // rocketGroup.add(fireGroup1);
-    // fireGroup1.position.set(66,556,0);
-    // fireGroup1.rotation.z= Math.PI;
 
         
     }
@@ -178,11 +169,6 @@ function generateSprite() {
     gradient.addColorStop( 0.6, 'rgba(0,255,255,.5)' );
     gradient.addColorStop( 0.8, 'rgba(0,53,169,1)' );
     gradient.addColorStop( 1, 'rgba(0,0,0,1)' );
-
-    // gradient.addColorStop( 0, 'rgba(69,154,192,.01)' );
-    // gradient.addColorStop( 0.6, 'rgba(69,154,192,.05)' );
-    //  gradient.addColorStop( 0.8, 'rgba(0,53,169,1)' );
-    // gradient.addColorStop( 1, 'rgba(195,206,214,0.1)' );
     //填充方式
     context.fillStyle = gradient;
     //填充矩形
@@ -237,7 +223,6 @@ function initParticle( particle, delay ) {
 // 创建文字
 function createText(font) {
     var text = new THREE.FontLoader().load(font.src, function(text) {
-        console.log(font.src);
         var gem = new THREE.TextGeometry('UF', {
             size: 20, //字号大小，一般为大写字母的高度
             height: 0, //文字的厚度
@@ -283,9 +268,7 @@ function createText(font) {
         gem1.center();
         var mat = new THREE.MeshPhongMaterial( { color:0x33ccff,
             shininess:30,
-           // specular: 0x101010,
-            reflectivity:0,
-        //    refractionRation:1 ,       
+            reflectivity:0,   
            transparent:true,
 
             blending: THREE.NoBlending   ,    
@@ -303,47 +286,17 @@ function createText(font) {
 }
 
 
-// function threeStart() {
-//     initThree();
-//     initCamera();
-//     initScene();
-    
-//     setLights();
-//     initLight();
-//     createFire();
-//     initObject();
-
-//  //   createText();
-   
-
-//     animation();
-
-// }
-
-// function rocketObj(font){
-//     console.log('rocket ok');
-//     console.log(font.src);
-// 	createFire();
-//     initObject();
-//     createText(font);
-// 	return rocketGroup;
-// }
 
 function resizeRocket(){
     rocketGroup.scale.x = rocketGroup.scale.y = 0.48;
     rocketGroup.position.set(-20,-160,700);
-
 }
 export default function createRocket(font){
 
     resizeRocket();
-    console.log('rocket ok');
-   //` console.log(font.src);
 	createFire();
     initObject();
     createText(font);
-   // console.log('in rocket rocketGroup is '+typeof rocketGroup);5
-
 	return rocketGroup;
 }
 
