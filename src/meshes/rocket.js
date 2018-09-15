@@ -3,7 +3,6 @@ import * as TWEEN from "../util/Tween";
 
 //创建火箭模型主体
 var rocketGroup =new THREE.Group();
-rocketGroup.name = "rocketObj";
 function initObject() {
     //车床数据
     var points = [],
@@ -332,7 +331,7 @@ function createText(font) {
 
 function resizeRocket(){
     rocketGroup.scale.x = rocketGroup.scale.y = 0.48;
-    rocketGroup.position.set(-20,-160,300);
+    rocketGroup.position.set(-20,-160,700);
 
 }
 export default function createRocket(font){
@@ -344,7 +343,7 @@ export default function createRocket(font){
     initObject();
     createText(font);
    // console.log('in rocket rocketGroup is '+typeof rocketGroup);5
-   
+
 	return rocketGroup;
 }
 

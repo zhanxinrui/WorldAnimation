@@ -10,10 +10,10 @@ window.consts = {
     // globeMaxZoom: 70,
     // globeMinZoom: 5000,
     // targetCameraZ: 2000,
-    globeMaxZoom: 300,
+    globeMaxZoom: 700,//无论如何镜头距离底面都比这个值大 1000
     globeMinZoom: 2500,
     targetCameraZ: 1500,
-    cameraMaxView:1500*0.9,//和targetCameraZ一致
+    cameraMaxView:1500*0.93,//和targetCameraZ一致
     globeRadius: 500,
     renderer: null,
 
@@ -31,12 +31,11 @@ window.consts = {
 
         mouseXOnMouseDown: 0,
         mouseYOnMouseDown: 0,
+
         targetRotationX: .45,  //初始旋转x弧度
         targetRotationY: 0,
         targetRotationXOnMouseDown: 0,
-        targetRotationYOnMouseDown: 0,
-        mouseXOnWorldCS:0, //世界坐标系下的x,y坐标
-        mouseYOnWorldCS:0
+        targetRotationYOnMouseDown: 0
     },
 
     lights: {
@@ -57,7 +56,9 @@ window.consts = {
         targetRotationXOnTouchDown:0,
         targetRotationYOnTouchDown:0,
         touchDisOnTouchMove:0,
-        touchDisOnTouchDown:0
+        touchDisOnTouchDown:0,
+        touchXOnWorldCS:0,
+        touchYOnWorldCS:0
     }
 }
 

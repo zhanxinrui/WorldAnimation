@@ -58,51 +58,16 @@ function cacheImages() {
                 let _img = new Image();
                 _img.src = require("../assets/" + v);
                 _img.onload = () => resolve(_img);
-                console.log(_img.src);
+                // console.log(_img.src);
             })
         });
-        console.log(caches);
+        // console.log(caches);
         return Promise.all(caches);//成功返回img的数组
     }
 
 }
-// function cacheFonts(){
-//     let fonts = ["gentilis_bold.typeface.json","gentilis_regular.typeface.json",
-//     "helvetiker_regular.typeface.json","optimer_bold.typeface.json","optimer_regular.typeface.json"];
-//     return ()=>{
-//         let caches = fonts.map(v=>{
-//             return new Promise((resolve) => {
-//                 let _font = {
-//                 src: require("../assets/"+v),
-//                 onload : () => resolve(_font)
-//                 }
-//                 console.log(_font.src);
-//             })
-//         });
-//         console.log(caches);
-//        var cachesPromise = Promise.all(caches);
-//         cachesPromise.catch((result)=>{console.log('promise ok'+result);});
-//         console.log("执行到这了");
-//         console.log(cachesPromise);
-//         return cachesPromise;
-        
-//         //Promise.all可以将多个Promise实例包装成一个新的Promise实例。同时，成功和失败的返回值是不同的，成功的时候返回的是一个结果数组，而失败的时候则返回最先被reject失败状态的值。
-//     }
-// }
 
 function cacheFonts(){
-    // let fonts = ["gentilis_bold.typeface.json","gentilis_regular.typeface.json",
-    // "helvetiker_regular.typeface.json","optimer_bold.typeface.json","optimer_regular.typeface.json"];
-
-    //     let caches = images.map(v => {
-    //             let _font = {
-    //             src: require("../assets/"+v)
-    //             }
-    //             console.log(_img.src);
-    //     })
-    //     console.log(caches);
-    //     return Promise.all(caches);
-    // }
 
     let fonts = ["gentilis_bold.typeface.json","gentilis_regular.typeface.json",
     "helvetiker_regular.typeface.json","optimer_bold.typeface.json","optimer_regular.typeface.json"];
@@ -111,10 +76,10 @@ function cacheFonts(){
                 let _font = {
                 src: require("../assets/"+v)
                 }
-                console.log(_font.src);
+                // console.log(_font.src);
                 return _font;
         })
-        console.log(caches);
+        // console.log(caches);
         return caches
     }
 }

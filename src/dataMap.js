@@ -1,5 +1,6 @@
-export{ dataMap};
 
+// MAP DATA
+// NUMBER, BOOK TYPE, LAT, LON, LOCATION
 var dataMap = [
     // SHOPIFY
     [0,0,33.58,-117.62,"Orange County, CA, USA"],
@@ -962,3 +963,4 @@ var dataMedia = [
     //
     // CODE OUT THE LOOP UNTIL READY TO ANIMATE
 ];
+export default dataMap;

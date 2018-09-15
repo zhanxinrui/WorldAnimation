@@ -1,10 +1,3 @@
-import * as Detector from "./util/Detector";
-import * as THREE from "three";
-import * as jQuery from "jquery";
-import * as $ from "jquery";
-export {checkDistance};
-// import * as TWEEN from "../util/Tween";
-
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 
 var deviceSettings = {
@@ -22,7 +15,7 @@ var deviceSettings = {
     isWinSafari: null,
     isMacSafari: null
     };
-
+//设备设置
 function setupDeviceSettings() {
     var ua = navigator.userAgent.toLowerCase();
     deviceSettings.isAndroid = ua.indexOf("android") > -1;
@@ -49,7 +42,7 @@ function setupDeviceSettings() {
 }
 
 var container, camera, scene, renderer, stats, statsCreated, i, x, y, b;
-
+//基本参数设置
 var mouse = new THREE.Vector2(), mouseX = 0, mouseY = 0,
     mouseXOnMouseDown = 0, mouseYOnMouseDown = 0,
     clientMouseX = 0, clientMouseY = 0, initMouseX,
@@ -67,10 +60,10 @@ var mouse = new THREE.Vector2(), mouseX = 0, mouseY = 0,
     isMouseDown = false, isMouseMoved = false, isGlobeRotated = false, isGlobeEventsEnabled = false;
 
 var globeRaycaster = new THREE.Raycaster(), intersects,  intersection = null, isParticleHit = false, isMediaHit = false;
-    globeRaycaster.params.Points.threshold = 0.4;
+    globeRaycaster.params.Points.threshold = 0.4; //raycaster()这个类设计用于鼠标去获取在3D世界被鼠标选中的一些物体
 
-var colorPrimary_Base = "#33CCFF"; 
-var colorSecondary_Base = "#FF1313"; //#FF0000
+var colorPrimary_Base = "#33CCFF"; //蓝色
+var colorSecondary_Base = "#FF1313"; //#FF0000 红色
 var colorPrimary = colorPrimary_Base;
 var colorSecondary = colorSecondary_Base;
 var colorDarken = "#000000";
@@ -90,9 +83,9 @@ function initWebgl() {
     var width  = window.innerWidth, height = window.innerHeight;
 
     scene = new THREE.Scene();
-    scene.fog = new THREE.Fog( 0x000000, 0, 400 );
+    scene.fog = new THREE.Fog( 0x000000, 0, 400 );//颜色，最近和最远边界
     
-    camera = new THREE.PerspectiveCamera(45, width / height, 1, 2000);
+    camera = new THREE.PerspectiveCamera(45, width / height, 1, 2000);  
     camera.position.x = 0;
     camera.position.y = 0;
     camera.position.z = openingCameraZ;
@@ -100,31 +93,28 @@ function initWebgl() {
     camera.rotation.y = 0;
     camera.rotation.z = 0;
     
-
-    /*can't use arrayExecutor*/
-    // var functionArr =  [
-    //     { fn: createGroup, 			vars: [stepComplete] },
-    //     { fn: createLights, 		vars: [stepComplete] },
-    //     { fn: createUniverse, 		vars: [stepComplete] },
-    //     { fn: createGlobe, 			vars: [stepComplete] },
-    //     { fn: createDots, 			vars: [stepComplete] },
-    //     { fn: createMedia, 			vars: [stepComplete] },
-    //     { fn: createArcsSnake, 		vars: [stepComplete] },
-    //     { fn: createArcsRocket, 	vars: [stepComplete] },
-    //     { fn: createArcsAll, 		vars: [stepComplete] },
-    //     { fn: createRings, 			vars: [stepComplete] },
-    //     { fn: createSpikes, 		vars: [stepComplete] },
-    //     { fn: createRingPulse, 		vars: [stepComplete] },
-    //     { fn: createRain, 			vars: [stepComplete] },
-    //     { fn: createMinimapBg, 		vars: [stepComplete] },
-    //     { fn: createGlitch, 		vars: [stepComplete] },
-    //     { fn: createPreloader, 		vars: [stepComplete] },
-    //     //{ fn: createGyroscope, 		vars: [stepComplete] },
-    //     { fn: createStars, 			vars: [stepComplete] },
-    //     { fn: initAudio, 			vars: null }
-    // ];
-
- //   arrayExecuter.execute(functionArr);
+    var functionArr =  [
+        { fn: createGroup, 			vars: [stepComplete] },
+        { fn: createLights, 		vars: [stepComplete] },
+        { fn: createUniverse, 		vars: [stepComplete] },
+        { fn: createGlobe, 			vars: [stepComplete] },
+        { fn: createDots, 			vars: [stepComplete] },
+        { fn: createMedia, 			vars: [stepComplete] },
+        { fn: createArcsSnake, 		vars: [stepComplete] },
+        { fn: createArcsRocket, 	vars: [stepComplete] },
+        { fn: createArcsAll, 		vars: [stepComplete] },
+        { fn: createRings, 			vars: [stepComplete] },
+        { fn: createSpikes, 		vars: [stepComplete] },
+        { fn: createRingPulse, 		vars: [stepComplete] },
+        { fn: createRain, 			vars: [stepComplete] },
+        { fn: createMinimapBg, 		vars: [stepComplete] },
+        { fn: createGlitch, 		vars: [stepComplete] },
+        { fn: createPreloader, 		vars: [stepComplete] },
+        //{ fn: createGyroscope, 		vars: [stepComplete] },
+        { fn: createStars, 			vars: [stepComplete] },
+        { fn: initAudio, 			vars: null }
+    ];
+    arrayExecuter.execute(functionArr);
     
     renderer = new THREE.WebGLRenderer({ 
         antialias : true, 
@@ -160,14 +150,15 @@ var preloaderAnimationIn,
     preloaderSplitTextWordTotal,
     isIntroDone = false,
     introAnimation;
-
+//TweenMax.set( target:Object, vars:Object ) 
 function createPreloader(callbackFn) {
     TweenMax.set( "#bookNumber", { transformPerspective: 600, perspective: 300, transformStyle: "preserve-3d" });
     TweenMax.set( "#bookQuote", { transformPerspective: 600, perspective: 300, transformStyle: "preserve-3d" });
     TweenMax.set( "#preloaderBar", { scaleX: 0, autoAlpha: 0, transformOrigin: 'center center' });
-    TweenMax.set( "#preloaderBarInner", { scaleX: 0, autoAlpha: 0, transformOrigin: 'center center' });
+    TweenMax.set( "#preloaderBarInner", { scaleX: 0, autoAlpha: 0, transformOrigin: 'center center' });//scaleX(x)	通过设置 X 轴的值来定义缩放转换。
     TweenMax.set( ".close line", { drawSVG: "50% 50%", stroke: "#FFFFFF", autoAlpha: 0 } );
-    TweenMax.set( ".close circle", { drawSVG: "50% 50%", stroke: "#FFFFFF", autoAlpha: 0 } );
+    TweenMax.set( ".close circle", { drawSVG: "50% 50%", stroke: "#FFFFFF", autoAlpha: 0 } );//DrawSVGPlugin drawSVG 前一个值是开始的位置距离start端点占总的的百分比，第二个值是线的终点到开始的占总的距离百分比。
+
     
     changeTagline();
     preloaderSplitText = new SplitText("#bookQuote", {type:"words"});
@@ -295,8 +286,8 @@ function finishPreloader() {
     preloaderAnimationOut.play(0);
 }
 
-//var arrayExecuter = new ArrayExecuter();
-//var stepComplete = arrayExecuter.stepComplete_instant.bind(arrayExecuter);
+var arrayExecuter = new ArrayExecuter();
+var stepComplete = arrayExecuter.stepComplete_instant.bind(arrayExecuter);
 
 function initExperience() {
     document.getElementById("interactive").addEventListener( 'mousedown', onDocumentMouseDown, false );
@@ -328,7 +319,8 @@ function playIntro() {
     TweenMax.set( "#bracket-left", { drawSVG: "20% 30%" } );
     TweenMax.set( "#bracket-right", { drawSVG: "70% 80%"} );
     
-    introAnimation =  new TimelineMax({ paused: true, force3D: true,
+    introAnimation =  new TimelineMax({ 
+        paused: true, force3D: true,
         onComplete:function(){
             //setArcAnimation("snake");
             isIntroDone = true;
@@ -424,9 +416,10 @@ function createGroup(callbackFn) {
     earthObject.rotation.y = -90 * toRAD;
     rotationObject.add(earthObject);
     
-    if (callbackFn) {
+        if (callbackFn) {
         callbackFn();
     }
+
 }
 
 
@@ -816,7 +809,7 @@ function createDots(callbackFn) {
     });
     
     for ( i = 0; i < dataMap.length; i ++ ) {
-        var bookType = dataMap[i][1];
+        var bookType = dataMap[i][1];//datamap的元素格式 [0,0,33.58,-117.62,"Orange County, CA, USA"],
         var x = dataMap[i][2];
         var y = dataMap[i][3];
         
@@ -2937,12 +2930,12 @@ function checkIsBlack(dataPixel){
     }
 }
 
-function shadeBlend(p,c0,c1) {
+function shadeBlend(p,c0,c1) {//p 百分比 ，c0是一个颜色 ，c1是一个颜色，就是将c1与c0的色差比例性加到c0上，相当于两色进行了混合
     var n=p<0?p*-1:p,u=Math.round,w=parseInt;
-    if(c0.length>7){
+    if(c0.length>7){//rgb()格式
         var f=c0.split(","),t=(c1?c1:p<0?"rgb(0,0,0)":"rgb(255,255,255)").split(","),R=w(f[0].slice(4)),G=w(f[1]),B=w(f[2]);
         return "rgb("+(u((w(t[0].slice(4))-R)*n)+R)+","+(u((w(t[1])-G)*n)+G)+","+(u((w(t[2])-B)*n)+B)+")"
-    }else{
+    }else{//十六进制格式
         var f=w(c0.slice(1),16),t=w((c1?c1:p<0?"#000000":"#FFFFFF").slice(1),16),R1=f>>16,G1=f>>8&0x00FF,B1=f&0x0000FF;
         return "#"+(0x1000000+(u(((t>>16)-R1)*n)+R1)*0x10000+(u(((t>>8&0x00FF)-G1)*n)+G1)*0x100+(u(((t&0x0000FF)-B1)*n)+B1)).toString(16).slice(1)
     }
@@ -3119,7 +3112,7 @@ function onMouseWheel(event) {
     targetCameraZ -= event.wheelDeltaY * 0.05;
 }
 
-function onDocumentMouseDown( event ) {
+function onMouseWheel(event){
     if ( isGlobeEventsEnabled === false ) return;
     event.preventDefault();
     isMouseDown = true;
@@ -4234,5 +4227,4 @@ var dataMedia = [
     // CODE OUT THE LOOP UNTIL READY TO ANIMATE
 ];
 
-//$(document).ready(initWebgl);
-window.onload = initWebgl();
+$(document).ready(initWebgl);
