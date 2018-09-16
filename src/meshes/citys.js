@@ -1,17 +1,35 @@
+import dataMap from "../dataMap";
+console.log('datamap');
+console.log('dataMap',dataMap);
+
+import * as THREE from "three";
+import {
+    colorMix,
+    generateRandomNumber,
+    latLongToVector3
+} from "../util"
+import consts from "../consts";
+export default createCitys;
+var globeCityNames = new THREE.Group();//name group //因为异步所以放前面来
+var globeCitys = new THREE.Group();//city的总group
 //创建城市group
-function createCitys(){
-	var globeCitys = new THREE.Group();//city的总group
-	var globeCityNames = new THREE.Group();//name group
-	let globeCityBufferGeometry = new THREE.globeCityBufferGeometry();
+function createCitys(font){
+ //   console.log('in');
+    let globeCityBufferGeometry = new THREE.BufferGeometry();
+    let globeCityVertices = [];
 	  for ( i = 0; i < dataMap.length-1; i ++ ) {
 	  	var lat = dataMap[i][2] ,
 	  		lng = dataMap[i][3],
-	  		position = latLongToVectors(lat,lng,consts.globeRadius, 0.3);
+	  		position = latLongToVector3(lat,lng,consts.globeRadius, 0.3);
 	  		globeCityVertices.push(position);
-
-	  		//调用文字创建
-	  		let textObj = createText(font,dataMap[i][4] ,position);
-	  		globeCityNames.add(textObj);
+          //  console.log('dataMap',dataMap);
+              //调用文字创建
+            //   let textObj ;
+        //   if(i <= 1)  
+        //      createText(font,dataMap[i][4] ,position);
+            // console.log('textObj',textObj);
+            
+	  		//globeCityNames.add(textObj);
 	  }
 	var positions = new Float32Array(globeCityVertices.length * 3);
     for (var i = 0; i < globeCityVertices.length; i++) {
@@ -55,7 +73,7 @@ var globeCityColors = [];
     globeCityBufferGeometry.addAttribute('color',new THREE.BufferAttribute(colors,3))
     globeCityBufferGeometry.colorsNeedUpdate = true;
 
-    globeCityLight = new THREE.points(globeCityBufferGeometry,globeCityMaterial);
+    var globeCityLight = new THREE.Points(globeCityBufferGeometry,globeCityMaterial);
     globeCityLight.sortParticles = true;
     globeCityLight.name = 'globeCityLight';
     globeCitys.add(globeCityLight);
@@ -68,10 +86,10 @@ var globeCityColors = [];
 function createText(font,cName,position) {
 	var textObj;
     var text = new THREE.FontLoader().load(font.src, function(text) {
-        console.log(font.src);
+       // console.log(font.src);
         var gem = new THREE.TextGeometry(cName, {
-            size: 10, //字号大小，一般为大写字母的高度
-            height: 0, //文字的厚度
+            size: 4, //字号大小，一般为大写字母的高度
+            height: 0.2, //文字的厚度
             weight: 'normal', //值为'normal'或'bold'，表示是否加粗
             font: text, //字体，默认是'helvetiker'，需对应引用的字体文件
             style: 'normal', //值为'normal'或'italics'，表示是否斜体
@@ -91,13 +109,21 @@ function createText(font,cName,position) {
           depthWrite: false,
           depthTest: false,
         } );
+      //  console.log('gem',gem,'mat',mat);
+        
+   
          textObj = new THREE.Mesh(gem, mat);
+      //  console.log("texObj in func",textObj);
         textObj.castShadow = true;
         textObj.position.set(position.x,position.y,position.z);
         textObj.name = cName;
+        globeCityNames.add(textObj);
         // rocketGroup.add(textObj);
      //   textObj.rotation.z = Math.PI*1/2;
+     //return textObj;
     });//不懂为什么要用回调函数
-    return textObj;
+  
+   // return text
+  
 
 }

@@ -963,3 +963,4 @@ var dataMedia = [
     //
     // CODE OUT THE LOOP UNTIL READY TO ANIMATE
 ];
+export default dataMap;

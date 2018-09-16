@@ -8,22 +8,22 @@ import consts from "../consts";
 let _geometry = new THREE.SphereBufferGeometry(consts.globeRadius, 64, 64);
 let _geometry1 = new THREE.SphereBufferGeometry(consts.globeRadius,64,64);
 //var _geometry1 = new THREE.CylinderBufferGeometry( 100, 100, 80, 32 );
-_geometry1.openEnded = false;
+_geometry.openEnded = false;
 //function coreEarth()
-function innerCore() {
-    let _material = new THREE.MeshPhongMaterial({
-        color: new THREE.Color(0xFF0000),
-        transparent: true,
-        blending: THREE.AdditiveBlending
-    });
+// function innerCore() {
+//     let _material = new THREE.MeshPhongMaterial({
+//         color: new THREE.Color(0xFF0000),
+//         transparent: true,
+//         blending: THREE.AdditiveBlending
+//     });
 
-    return new THREE.Mesh(_geometry1, _material)
-}
+//     return new THREE.Mesh(_geometry1, _material)
+// }
 //function coreEarth()
 function innerEarth() {
     let _material = new THREE.MeshPhongMaterial({
-         color: new THREE.Color(colorMix(.65)),
-       //color: new THREE.Color(0xffffff),
+        color: new THREE.Color(colorMix(.65)),
+    //    color: new THREE.Color(0xffff00),
         transparent: true,
         blending: THREE.NoBlending,
         side: THREE.FrontSide,
@@ -33,7 +33,10 @@ function innerEarth() {
         depthTest: false,
    //     renderOrder:1
     });
-    return new THREE.Mesh(_geometry, _material)
+    let EarthObj = new THREE.Mesh(_geometry, _material);
+    EarthObj.name = "innerEarth";
+    EarthObj.position.set(0,0,0);
+    return EarthObj;
 }
 
 /*    let images = ["dot-inverted.png", "earth-glow.jpg",
@@ -59,7 +62,10 @@ function earthMap(img) {//map.png
       //  renderOrder:2,
     });
     _material.needsUpdate = true;
-    return new THREE.Mesh(_geometry1, _material)
+    let earthMapObj =  new THREE.Mesh(_geometry1, _material);
+    earthMapObj.name = "earthMap";
+    earthMapObj.position.set(0,0,0);
+    return earthMapObj;
 }
 
 function earthBuffer(img) {//就是那些小方块 map_inverted.png
@@ -83,7 +89,9 @@ function earthBuffer(img) {//就是那些小方块 map_inverted.png
                 var y = curY;
                 var lat = (y / (canvas.height / 180) - 90) / -1;
                 var lng = x / (canvas.width / 360) - 180;
+               // console.log('globeRAD',consts.globeRadius);
                 var position = latLongToVector3(lat, lng, consts.globeRadius, 0.3);
+                //console.log('position',position);
                 globeCloudVerticesArray.push(position);
             }
         }
@@ -142,14 +150,15 @@ function earthBuffer(img) {//就是那些小方块 map_inverted.png
     globeCloud = new THREE.Points(globeCloudBufferGeometry, globeCloudMaterial);
     globeCloud.sortParticles = true;
     globeCloud.name = 'globeCloud';
-    return globeCloud
+    globeCloud.position.set(0,0,0);
+    return globeCloud;
 }
 
 function outerEarth(img) {
 
     let globeGlowSize, globeGlowTexture, globeGlowBufferGeometry, globeGlowMaterial, globeGlowMesh;
 
-    globeGlowSize = 200;
+    globeGlowSize = 1200;
     globeGlowTexture = new THREE.TextureLoader().load(img.src);
     globeGlowTexture.anisotropy = 2;
 
@@ -166,14 +175,14 @@ function outerEarth(img) {
         opacity: 1,
 
         fog: true,
-        blending: THREE.NormalBlending,
+        blending: THREE.AdditiveBlending,
 
         depthWrite: false ,
         depthTest: false
     });
     globeGlowMesh = new THREE.Mesh(globeGlowBufferGeometry, globeGlowMaterial);
     globeGlowMesh.name = 'globeGlowMesh';
-
+    //globeGlowMesh.position.set(0,consts.globeRadius,0);
     return globeGlowMesh
 }
 
@@ -233,7 +242,7 @@ function spike() {
     spikesBufferGeometry.addAttribute('position', new THREE.BufferAttribute(positions, 3));
     spikesMesh = new THREE.LineSegments(spikesBufferGeometry, spikesMaterial);
     spikesObject.add(spikesMesh);
-
+    spikesObject.position.set(0,0,0);
     return spikesObject
 }
 

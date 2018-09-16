@@ -5,6 +5,7 @@ import "./css/socialicons.css"
 import * as fp from "lodash/fp"
 import * as THREE from "three";
 import consts from "./consts";
+
 // import projector  from"./util/Projector"; 
 
 // import {dataMap} from "./dataMap";
@@ -18,7 +19,7 @@ import {
     createRings,
     spike,
     createRocket,
-
+    createCitys
 } from "./meshes"
 
 import {
@@ -136,11 +137,15 @@ async function init() {
     
 
     earthRotation.add(innerEarth());
-   
     earthRotation.add(earthMap (imgs[3]));//每个img都是一个dom元素，传进去通过.src获取路径
     earthRotation.add(earthBuffer(imgs[2]));
+    //    let fonts = ["gentilis_bold.typeface.json","gentilis_regular.typeface.json",
+   // "helvetiker_regular.typeface.json","optimer_bold.typeface.json","optimer_regular.typeface.json"];
+   var cityObj = createCitys(fonts[3]);
+    earthRotation.add(cityObj);
+  //  earthRotation.add(outerEarth(imgs[1]))//地球外面的一些装饰和光
 
-    
+    console.log(cityObj);
    
 
   //  await scene.add(universe(imgs[5]))
@@ -154,10 +159,10 @@ async function init() {
     //   await scene.add(createRsings());
     earthRotation.add(spike());//那个中央环
     await scene.add(earthRotation);
-      await scene.add(outerEarth(imgs[1]))//地球外面的一些装饰和光
+    // await scene.add(createRings());//多层环，no need
    console.log('ok after add');
    // await scene.add(createRocket(fonts[2]));
-     earthRotation.position.set(0,0,0);
+  //   earthRotation.position.set(0,0,0);
     // earthRotation.scale.x = earthRotation.scale.y =earthRotation.scale.z = 20;
 
     //    earthRotation.add(innerCore());
@@ -193,7 +198,8 @@ function setScene() {
 }
 
 function setCamera() {
-    camera = new THREE.PerspectiveCamera(45, WIDTH / HEIGHT, 1, cameraMaxView);//这个最大可能会被超就变黑了
+    camera = new THREE.PerspectiveCamera(45, WIDTH / HEIGHT, 1, cameraMaxView);//可能是因为相机是透视的，所以不能完全遮盖住
+    //var camera = new THREE.OrthographicCamera( WIDTH / - 2, WIDTH / 2, HEIGHT / 2, HEIGHT / - 2, 1, cameraMaxView );
     camera.position.x = 0;
     camera.position.y = 0;
     camera.position.z = targetCameraZ;
@@ -221,7 +227,7 @@ function setRender() {
 
   //
 //  renderer.sortObjects = true;
-
+camera.position.set(0,0,0);
 
    // renderer1.setClearColor(0xFFFFFF, 1.0);
 
@@ -304,21 +310,21 @@ function render() {
     //trackballControls.update();
     state.update()
     // console.log(scene.getObjectByName("rotationObject"));
-    if (targetCameraZ < globeMaxZoom) targetCameraZ = globeMaxZoom;
-    if (targetCameraZ > globeMinZoom) targetCameraZ = globeMinZoom;
+    if (targetCameraZ < globeMaxZoom) {targetCameraZ = globeMaxZoom;cameraMaxView=targetCameraZ*0.93;}
+    if (targetCameraZ > globeMinZoom) {targetCameraZ = globeMinZoom;cameraMaxView=targetCameraZ*0.93;}
 
-    camera.position.z = interpolation(camera.position.z, targetCameraZ, 1);
-
+    // camera.position.z = interpolation(camera.position.z, targetCameraZ, 0.1);
+    camera.position.z = targetCameraZ;
 
     // if (targetRotationX > 75 * toRAD) targetRotationX = 75 * toRAD;
     // if (targetRotationX < -75 * toRAD) targetRotationX = -75 * toRAD;
 
-    if (scene.getObjectByName("rotationObject")) {
+    if (scene.getObjectByName("rotationObject")&&!isMouseDown&&!isTouchDown) {
 
         rotationObject.rotation.y +=0.005;
 
     }
-
+    camera.updateProjectionMatrix();
 
     if (isMouseDown) return;
   //var globeEarthObject=  scene.getObjectByName("rotationObject")
@@ -349,9 +355,10 @@ function onWindowResize() {
 function onMouseWheel(event) {
     event.preventDefault();
     targetCameraZ -= event.wheelDeltaY * 0.5;
-    cameraMaxView=targetCameraZ*0.93;//和targetCameraZ一致
-    camera.far = cameraMaxView;//保证能看到的只有半个球
+    cameraMaxView=targetCameraZ*0.83;//和targetCameraZ一致
+    camera.far = cameraMaxView;//- Math.pow(cameraMaxView,2)*0.2 ;//保证能看到的只有半个球
     camera.updateProjectionMatrix();//更改了camera参数必须使用这个更新
+    //globeRadius += cameraMaxView*0.93;
 }
 
 
@@ -370,7 +377,6 @@ function onMouseDown(event) {
     //在世界坐标系下的按下坐标
     mouseXOnWorldCS = (event.clientX/WIDTH)*2-1;
     mouseYOnWorldCS = -(event.clientY/HEIGHT)*2+1;
-     
   /*  推导过程：
     设A点为点击点(x1,y1),x1=e.clintX, y1=e.clientY
     设A点在世界坐标中的坐标值为B(x2,y2);
@@ -398,7 +404,7 @@ function onMouseMove(event) {
     targetRotationY = targetRotationYOnMouseDown + (mouseX - mouseXOnMouseDown) * .0025;
     rotationObject.rotation.x = interpolation(rotationObject.rotation.x, targetRotationX, .1);
     rotationObject.rotation.y = interpolation(rotationObject.rotation.y, targetRotationY, .1);
-
+   // rotationObject.rotation.y 
 }
 
 function onMouseUp(event) {
@@ -442,6 +448,7 @@ function onMouseUp(event) {
                 //var intersected = intersects[0].object;
                 console.log('intersectsUp[0]',intersectsUp[0].object)
             }
+   
 }
 
 function onMouseLeave(event) {
@@ -453,6 +460,7 @@ function onMouseLeave(event) {
 }
 
 function onTouchScale(scaleDis) {
+    isTouchDown = true;
     targetCameraZ -= scaleDis * 0.3;
     cameraMaxView=targetCameraZ*0.93;//和targetCameraZ一致
     camera.far = cameraMaxView;//保证能看到的只有半个球
