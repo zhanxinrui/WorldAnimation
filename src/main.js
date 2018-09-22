@@ -5,6 +5,9 @@ import "./css/socialicons.css"
 import * as fp from "lodash/fp"
 import * as THREE from "three";
 import consts from "./consts";
+import $ from "jquery";
+import Vue from "vue";
+import VeeValidate from   "vee-validate"
 
 // import projector  from"./util/Projector"; 
 
@@ -19,7 +22,8 @@ import {
     createRings,
     spike,
     createRocket,
-    createCitys
+    createCitys,
+    checkIn
 } from "./meshes"
 
 import {
@@ -95,22 +99,12 @@ container = document.getElementById("interactive"), trackballControls,
     var rocketObj;
    // rotationObject1
 
-init();
+
 
 document.body.appendChild(state.dom);
-window.addEventListener('resize', onWindowResize, false);
-document.getElementById("interactive").addEventListener('mousewheel', onMouseWheel, false);
-document.getElementById("interactive").addEventListener('mousedown', onMouseDown, false);
-document.getElementById("interactive").addEventListener('mousemove', onMouseMove, false);
-document.getElementById("interactive").addEventListener('mouseup', onMouseUp, false);
-document.getElementById("interactive").addEventListener('mouseleave', onMouseLeave, false);
 
-document.getElementById("interactive").addEventListener('touchstart', onTouchDown, false);
-document.getElementById("interactive").addEventListener('touchmove', onTouchMove, false);
-document.getElementById("interactive").addEventListener('touchcancel', onTouchLeave, false);
-document.getElementById("interactive").addEventListener('touchend', onTouchUp, false);
+$( ()=> init());
 async function init() {
-
     let cacheF = cacheImages();
     let cacheF1 = cacheFonts();
     
@@ -125,6 +119,8 @@ async function init() {
     let _initStage = fp.flow(setScene, setCamera, setRender, setLights, animate);
     
     _initStage();
+    initDomEvent();
+    checkIn();
     let fonts = await cacheF1();
 
 
@@ -133,9 +129,6 @@ async function init() {
         "star.jpg", "universe.jpg"
     ];*/
     let earthRotation = setEarthObject();
-
-    
-
     earthRotation.add(innerEarth());
     earthRotation.add(earthMap (imgs[3]));//每个img都是一个dom元素，传进去通过.src获取路径
     earthRotation.add(earthBuffer(imgs[2]));
@@ -144,47 +137,16 @@ async function init() {
    var cityObj = createCitys(fonts[3]);
     earthRotation.add(cityObj);
   //  earthRotation.add(outerEarth(imgs[1]))//地球外面的一些装饰和光
-
-    console.log(cityObj);
-   
-
+    // console.log(cityObj);
   //  await scene.add(universe(imgs[5]))
     rocketObj = createRocket(fonts[2]);
     rocketObj.name = "Rocket";
-//ARCROCKET
-
-
-
     await scene.add(rocketObj);
     //   await scene.add(createRsings());
     earthRotation.add(spike());//那个中央环
     await scene.add(earthRotation);
     // await scene.add(createRings());//多层环，no need
    console.log('ok after add');
-   // await scene.add(createRocket(fonts[2]));
-  //   earthRotation.position.set(0,0,0);
-    // earthRotation.scale.x = earthRotation.scale.y =earthRotation.scale.z = 20;
-
-    //    earthRotation.add(innerCore());
-// earthRotation.position.set(0,0,0);
-// earthRotation.scale.x = earthRotation.scale.y =earthRotation.scale.z =   2;
-
-
-// var Core = innerCore();
-// Core.position.set(0,0,0);
-// Core.scale.x = Core.scale.y =Core.scale.z =  1;
-
-// scene.add(Core);
-
-
-
-
-
-
-
-
-
-
 
 }
 
@@ -192,11 +154,21 @@ function setScene() {
     scene = new THREE.Scene();
    // scene.fog = new THREE.Fog(0x000000, 0, 500);
     console.log(scene)
-
-
-
 }
-
+function initDomEvent(){
+    console.log('initDomeEventNow');
+    window.addEventListener('resize', onWindowResize, false);
+    document.getElementById("interactive").addEventListener('mousewheel', onMouseWheel, false);
+    document.getElementById("interactive").addEventListener('mousedown', onMouseDown, false);
+    document.getElementById("interactive").addEventListener('mousemove', onMouseMove, false);
+    document.getElementById("interactive").addEventListener('mouseup', onMouseUp, false);
+    document.getElementById("interactive").addEventListener('mouseleave', onMouseLeave, false);
+    
+    document.getElementById("interactive").addEventListener('touchstart', onTouchDown, false);
+    document.getElementById("interactive").addEventListener('touchmove', onTouchMove, false);
+    document.getElementById("interactive").addEventListener('touchcancel', onTouchLeave, false);
+    document.getElementById("interactive").addEventListener('touchend', onTouchUp, false);
+}
 function setCamera() {
     camera = new THREE.PerspectiveCamera(45, WIDTH / HEIGHT, 1, cameraMaxView);//可能是因为相机是透视的，所以不能完全遮盖住
     //var camera = new THREE.OrthographicCamera( WIDTH / - 2, WIDTH / 2, HEIGHT / 2, HEIGHT / - 2, 1, cameraMaxView );
@@ -415,16 +387,10 @@ function onMouseUp(event) {
     //检测按下登录键  按下和弹起时都在火箭主体内就可以
     let mouseXOnMouseUp = (event.clientX/WIDTH)*2-1;
     let mouseYOnMouseUp = -(event.clientY/HEIGHT)*2+1;
-    // let mouseXOnMouseUp =  event.clientX - WIDTH / 2;
-    // let mouseYOnMouseUp =  event.clientY - HEIGHT / 2;
+
         //根据照相机，把这个向量转换到视点坐标系
         var vectorUp = new THREE.Vector2(mouseXOnMouseUp,mouseYOnMouseUp);
         var vectorDown = new THREE.Vector2(mouseXOnWorldCS,mouseYOnWorldCS);
-       // var vectorUp = new THREE.Vector3(mouseXOnMouseUp,mouseYOnMouseUp,0.5);
-        // console.log("unproject",THREE.Vector3.unproject);
-        // vectorUp = vectorUp.unproject(camera);
-        // var vectorDown = new THREE.Vector2(mouseXOnWorldCS,mouseYOnWorldCS,0.5).unproject(camera);
-        // vectorDown  = vectorDown.unproject(camera); 
         var raycasterDown = new THREE.Raycaster();
         var raycasterUp = new THREE.Raycaster();
         // var raycasterDown = new THREE.Raycaster(camera.position,vectorDown.sub(camera.position).normalize());
@@ -443,10 +409,14 @@ function onMouseUp(event) {
             // console.log("当前点击（x,y）:",event.clientX,event.clientY);
             // console.log("火箭位置(x,y):",rocketObj.position.x,rocketObj.position.y);
         if (intersectsDown.length>0 && intersectsUp.length>0 ) {
+            $(".checkin-content").css("display","block");
+            $("#login-content").css("display","block");
                 //'选中第一个射线相交的物体'
-              var  SELECTED = intersectsUp[0].object;
-                //var intersected = intersects[0].object;
-                console.log('intersectsUp[0]',intersectsUp[0].object)
+                console.log('intersect the rocket');
+                // var a = $("checkin-content").css("display");
+                // console.log(a);
+                console.log('what"s');
+                // $("#login-content").css("display","block");
             }
    
 }
@@ -562,9 +532,11 @@ function onTouchUp(event) {
             // console.log("火箭位置(x,y):",rocketObj.position.x,rocketObj.position.y);
         if (intersectsDown.length>0 && intersectsUp.length>0 ) {
                 //'选中第一个射线相交的物体'
-            var  SELECTED = intersectsUp[0].object;
-                //var intersected = intersects[0].object;
-                console.log('intersectsUp[0]',intersectsUp[0].object)
+                console.log('intersect the rocket');
+                $(".checkin-content").css("display","block");
+                $("#login-content").css("display","block");
+                // console.log($('#checkin-content').css());
+
             }
 
 }

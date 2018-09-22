@@ -44,7 +44,8 @@ module.exports = {
             test: /\.(json)$/,
             loader: 'file-loader?limit=8192&name=fonts/[hash:8].[name].[ext]'
             // loader: 'file-loader',options:{name:'fonts/[hash:8].[name].[ext]'}
-        }
+        },
+        { test: /\.(eot|woff|woff2|svg|ttf|ttc|TTF|otf)([\?]?.*)$/, loader: "file-loader" },
     ]
     },
     plugins: [
@@ -74,7 +75,12 @@ module.exports = {
         //     chunks:'bundle'
         // }),
 
-    ]
+    ],
+    resolve: {
+        alias: {
+            'vue': 'vue/dist/vue.js'
+        }
+    }
     // plugins: [
     //     new webpack.optimize.CommonsChunkPlugin({
     //         name: 'vendor',
