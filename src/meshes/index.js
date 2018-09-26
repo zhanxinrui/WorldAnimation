@@ -11,7 +11,7 @@ import createRings from "./rings";
 import createStars from "./stars";
 import createRocket from "./rocket";
 import createCitys from "./citys";
-import checkIn from "./check_in";
+
 export {
     innerEarth,
     earthMap,
@@ -24,5 +24,5 @@ export {
  //   createStars,
     createRocket,
     createCitys,
-    checkIn
+
 }

@@ -1,6 +1,7 @@
 import Detector from "./Detector";
 import * as THREE from "three";
 import * as TWEEN from "./Tween";
+
 let deviceSettings = {
     isWebGL: false,
     isAndroid: null,
@@ -210,5 +211,6 @@ export {
     checkDistance,
     latLongToVector3,
     interpolation,
-    TWEEN
+    TWEEN,
+
 }

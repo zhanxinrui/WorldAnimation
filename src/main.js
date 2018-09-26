@@ -8,6 +8,7 @@ import consts from "./consts";
 import $ from "jquery";
 import Vue from "vue";
 import VeeValidate from   "vee-validate"
+
 // import projector  from"./util/Projector"; 
 // import {dataMap} from "./dataMap";
 // import {checkDistance}from "./threed";
@@ -21,9 +22,13 @@ import {
     spike,
     createRocket,
     createCitys,
-    checkIn
 } from "./meshes"
-
+import {
+    checkIn,
+    autoAdapt,
+    countTag,
+    animloop
+}from"./run"
 import {
     deviceSettings,
     cacheImages,
@@ -31,8 +36,7 @@ import {
     colorMix,
     interpolation,
     TWEEN,
-    latLongToVector3
-
+    latLongToVector3,
 } from "./util";
 import TrackballControls from "./util/TrackballControls";
 
@@ -97,9 +101,17 @@ document.body.appendChild(state.dom);
 
 $( ()=> init().then(function(){console.log('end the init')}));
 async function init() {
+    //auto adapt to the window
+    autoAdapt();
+    //load bar
+    countTag($("#load-count"),60);
+    animloop();
+    // $("#load-bar").css("display","none");
+
+    // $("#interactive").css("display","block");
+
     let cacheF = cacheImages();
     let cacheF1 = cacheFonts();
-    
     let imgs = await cacheF();
     // container.style.background = imgs[5];
     // document.getElementsByTagName('body').setAttribute('backgoround', 'red');
@@ -115,6 +127,7 @@ async function init() {
     checkIn();
     let fonts = await cacheF1();
 
+    countTag($("#load-count"),80);
 
     /*    let images = ["dot-inverted.png", "earth-glow.jpg",
         "map_inverted.png", "map.png",
@@ -141,6 +154,15 @@ async function init() {
     scene.add(earthRotation);
     // await scene.add(createRings());//多层环，no need
    console.log('ok after add');
+   countTag($("#load-count"),99);
+   var watchInt = setInterval(function(){
+       if($("#load-count").text()=="100%"){
+            $("#load-bar").css("display","none");
+            $("#interactive").css("display","block");
+            clearInterval(watchInt);
+       }
+   },1000)
+
 
 }
 

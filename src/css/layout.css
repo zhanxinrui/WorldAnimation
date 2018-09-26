@@ -2,19 +2,31 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Body - General Layout Structure	
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+*, *:before, *:after { max-height: 100000px }
+[v-cloak]{display:none !important;}
+
+html{
+	/* color:red; */
+	font-size:100px;
+	height:100%;
+	width:100%;
+	font-size:120px !important;
+
+}
 body {
+	background:#272822;
 	background-size: 100% 100%;
 	-moz-background-size: 100% 100%;
 	margin: 0;
 	padding: 0;
+	width:100%;
+	height:100%;
 	/* background-color: #000000; */
 	/* font: 18px/20px 'blender_promedium', Verdana, Arial, geneva, sans-serif; */
-	text-align: left;
-	/* color: #0082a2; */
-	overflow: hidden;
-	font-family: STHeiti-Light;
-	font-style: normal;
-	display:none;
+	/* text-align: left; */
+    font-family: STHeiti-Light;
+    font-style: normal;
+    font-size:0.16em;
 	}
 [v-cloak]{display:none;}
 	/*
@@ -147,7 +159,8 @@ GENERIC STUFF
 				}
 
 		#interactive {
-			display: block;
+			/* display: block; */
+			display:none;
 			position: absolute;
 			top: 0;
 			left: 0;
@@ -962,27 +975,66 @@ GENERIC STUFF
 
 
 
-body{
-    /*background: url("../assets/images/bg_login.jpg") no-repeat fixed;*/
-    /* set background tensile */
-    background-size: 100% 100%;
-    -moz-background-size: 100% 100%;
-    margin: 0;
-    padding: 0;
-    font-family: STHeiti-Light;
-    font-style: normal;
-    /*color:black;*/
-
-}
-
 .beBlock{
     display:block;
 }
+/*加载条的效果*/
+/* canvas{
+	color:red;
+} */
+#load-bar{
+	width:100%;
+	height: 100%;
+	position:relative;
+	/*left:50%;*/
+}
+#load-tag{
+	position:relative;
+	display:inline-block;
+	width:4rem;
+	height:2rem;
+	top:calc(50% - 1.1rem);
+	left:calc(50% - 3rem);
+	font-size:0.3rem;
+	line-height: 2rem;
+	color:#ffc;
+	text-shadow:0 0 .1rem ,0 0 .3rem;
+}
+#load-count{
+	position:relative;
+	display:inline-block;
+	width:4rem;
+	height:2rem;
+	top:calc(50% - 1.08rem);
+	left:calc(50% - 2.5rem);
+	font-size:0.3rem;
+	line-height: 2rem;
+	color:#ffc;
+	text-shadow:0 0 .1rem ,0 0 .3rem;
+}
 
+/*		#load-tag:hover{
+	color:transparent;
+	text-shadow:0 0 .1em white, 0 0 .3em white;
+
+}*/
+#load-count{
+	color:#ffffff;
+}
+#load-bar canvas{
+	position: absolute;
+	top: calc(50% - 50px);
+	top: -webkit-calc(50% - 100px);
+	left: calc(50% - 200px);
+	left: -webkit-calc(50% - 200px);
+  }
+
+
+/*登陆框*/
 .checkin-content{
     display:none;
-    width:600px;
-    height:600px;
+    width:6rem;
+    height:6rem;
     float:left;
     position:relative;
     left:50%;
@@ -997,57 +1049,62 @@ body{
     margin-right: auto;
     display: block;*/
     z-index:110;
+
+   
 }
 #login-content,#verify-content,#register-content{
+	top:30%;
     position:absolute;
-    left:-50%;
+    left:-45%;
     /*margin-left:-500px;*/
     /* background-color: red; */
     background-color: rgba(232, 229, 227, 0.95);
-    width: 490px;
-    height: 400px;
-    border: 1px solid #000000;
-    border-radius: 6px;
+    width: 4.9rem;
+    height: 4rem;
+    border: 0.01rem solid #000000;
+    border-radius: 0.06rem;
 /*    padding: 10px;
 *//*    margin-top: 15%;
     margin-left: auto;
     margin-right: auto;*/
     display: none;
-    padding-left:20px;
-    padding-right:20px;
-    margin:50px;
+    padding-left:0.2rem;
+    padding-right:0.2rem;
+    /*margin:3.125rem;*/
+     box-shadow: 0.02rem 0.04rem 0.03rem 0.01rem rgba(0,0,0,.3) ;
+
     /*垫高*/
     /* z-index:120; */
 }
 #register-content{
-    height:450px;
+    height:4.5rem;
 }
 
 .register-header,.verify-header,.login-header{
     /* display:absolute; */
     width: 100%;
-    height: 58px;
-    line-height: 58px;
+    height: 0.58rem;
+    line-height: .58rem;
     /*margin-bottom: 20px;*/
-    border-bottom: 1px solid #dcdcdc;
+    border-bottom: 0.01rem solid #dcdcdc;
 
 }
 
 .register-header img ,.verify-header img .login-header img{
-    width: 120px;
+    width: 1.2rem;
     margin-left: auto;
     margin-right: auto;
     display: block;
 }
 .register-header>div,.verify-header >div,.login-header > div{
     font-family:bosk_brush_font;
-    font-size:36px;
+    font-size:0.36rem;
     text-align:center;
 }
 
 .register-input-box3,.register-input-box,.verify-input-box,.login-input-box{
-    margin-top: 12px;
-    margin-bottom: 12px;
+/*    margin-top: .12rem;
+    margin-bottom: .12rem;*/
 
     width: 100%;
     margin-left: auto;
@@ -1065,10 +1122,10 @@ body{
     background-color: rgba(232, 229, 227, 0);
     right:2%;
     top:1%;
-    width:50px;
-    height:50px;
+    width:.5rem;
+    height:.5rem;
     color:#7a7a82;
-    font-size:40px;
+    font-size:.4rem;
     font:bold;
 /*    border-color: rgba(232, 229, 227, 0.95);
     border-radius :10px;
@@ -1078,7 +1135,7 @@ body{
 }  
 #register-close-button:hover,#verify-close-button:hover,#login-close-button:hover{
     color:#eda838;
-    font-size:50px;
+    font-size:.5rem;
     outline: 0px ;  
     top:0.5%;
 
@@ -1091,44 +1148,45 @@ body{
 
 
 #verify-modal{
-    margin-top:30px;
+    margin-top:.30rem;
 }
 /*placeholder居中*/
 input::-ms-input-placeholder {
     text-align: center;
     font-family: STHeiti-Light;
-        border-radius:   4px 0 0 4px ;
-
+        border-radius:   0.04rem 0 0 0.04rem ;
+	font-size:0.16rem;
 }
  
 input::-webkit-input-placeholder {
     text-align: center;
     font-family: STHeiti-Light;
-        border-radius:   4px 0 0 4px ;
+        border-radius:   0.04rem 0 0 0.04rem ;
+    font-size:0.16rem;
 }
 .register-input-box input,.login-input-box input{
         display:float !important; 
     margin:0 auto;
-    width: 340px;
-    height: 32px;
+    width: 3.4rem;
+    height: .32rem;
     /*margin: 18px;*/
-    border: 1px solid #dcdcdc;
-    border-radius: 4px;
-    padding-left: 12px;
+    border: 0.01rem solid #dcdcdc;
+    border-radius: 0.04rem;
+    padding-left: 0.12rem;
 }
 
 .register-input-box input:hover,.login-input-box input:hover{
-    outline: 1px solid #eda838;
+    outline: .01px solid #eda838;
 }
 /*.login-input-box input:active{
     border: 1px solid #eda838;
 }*/
 .register-input-box input:focus,.login-input-box input:focus{
-    outline: 1px solid #918e6f;
+    outline: .01rem solid #918e6f;
 }
 #register-input-box2 {
     position:relative;
-    left:-62px;
+    left:-0.62rem;
 }
 /*.login-input-box input:after{
     border: 1px solid #ff7d0a;
@@ -1154,13 +1212,13 @@ input::-webkit-input-placeholder {
 */
 #agree-policy,.remember-box{
     width: auto;
-    height: 25px;
+    height: .25rem;
     margin-left: 13%;
-    margin-top: 12px;
-    font-size: 12px;
+    /*margin-top: 0.75rem;*/
+    font-size: 0.1rem;
     zoom:130%;
-    line-height:12.5px;
-    vertical-align: bottom;
+    line-height:0.5;
+    /*vertical-align: top;*/
     /*word-spacing: */
 
     /*color: #6a6765;*/
@@ -1168,9 +1226,20 @@ input::-webkit-input-placeholder {
 #agree-policy{
     margin-left:1.5%;
 }
+#agree-policy label,.remember-box label{
+	display:inline-block;
+	vertical-align:middle;
+	height:.25rem;
+	line-height:1.25;
+
+}
+#agree-policy input,.remember-box input{
+	vertical-align: center;
+	/*width:auto;*/
+}
 
 .confirm-register-button,.confirm-register-button,.login-button-box ,.confirm-verify-button{
-    margin-top: 12px;
+    /*margin-top: 0.12rem;*/
     width: 100%;
     margin-left: auto;
     margin-right: auto;
@@ -1187,18 +1256,18 @@ input::-webkit-input-placeholder {
 .confirm-register-button button,.login-button-box button,.confirm-verify-button button{
     background-color: #918e6f;
     color: #ffffff;
-    font-size: 16px;
-    width: 386px;
-    height: 40px;
-    border: 1px solid #918e6f;
-    border-radius: 6px;
+    font-size: 0.16rem;
+    width: 3.86rem;
+    height: 0.4rem;
+    border: 0.01rem solid #918e6f;
+    border-radius: 0.06rem;
       outline: none;
 }
 
-#verify-img-button:hover,.confirm-register-button button:hover,.verify-send-button button:hover,.login-button-box button:hover,.confirm-verify-button button:hover{
+#verify-img-button:hover,.confirm-register-button button:hover,.verify-send-button button:hover,.verify-send-button input:hover,.login-button-box button:hover,.confirm-verify-button button:hover{
   /*  background-color: #918e6f;*/
   /*border: 2px solid #ff7d0a;*/
-   border: 2px solid #eda838;
+   border: 0.02rem solid #eda838;
    outline: none;
 }
 
@@ -1210,7 +1279,7 @@ input::-webkit-input-placeholder {
 
 
 .login-button-box,.confirm-verify-button{
-    margin-top: 12px;
+    /*margin-top: 0.12rem;*/
     width: 100%;
     margin-left: auto;
     margin-right: auto;
@@ -1218,48 +1287,48 @@ input::-webkit-input-placeholder {
 
 }
 
-.verify-send-button button{
+.verify-send-button button,.verify-send-button input{
 
     /*position:relative ;*/
     /*float:left;*/
     /*left:-30px;*/
     background-color: #918e6f;
     color: #ffffff;
-    font-size: 16px;
-    width: 97px;
-    height: 34px;
+    font-size: 0.16rem;
+    width: 0.97rem;
+    height: 0.34rem;
     /*margin-left: 10px;*/
-    border: 1px solid #918e6f;
-    border-radius: 0  6px 6px 0;
+    border: 0.01rem solid #918e6f;
+    border-radius: 0  0.06rem 0.06rem 0;
     
 }
 
 
 
 #verify-img-button{
-    width:95px;
+    width:0.95rem;
     font-family:Arial;  
     font-style:italic;  
     font-weight:bold;  
     border:0;  
-    letter-spacing:2px;  
+    letter-spacing:0.02rem;  
     color:#ccccc2;  
 
         /*background-color: #918e6f;*/
     /*color: #ffffff;*/
-    font-size: 16px;
-    width: 97px;
-    height: 34px;
+    font-size: 0.16rem;
+    width: 0.97rem;
+    height: 0.34rem;
     /*margin-left: 10px;*/
     background-color: #918e6f;
-    border: 1px solid #918e6f;
-    border-radius: 0  6px 6px 0;
+    border: 0.01rem solid #918e6f;
+    border-radius: 0  0.06rem 0.06rem 0;
 }
 #verify-img,.verify-send-button{
         display:inline;
         position:relative;
-        left:-3px;
-        top:1px;
+        left:-0.03rem;
+        top:0.01rem;
         /*float:left;*/
 
 }
@@ -1276,14 +1345,14 @@ input::-webkit-input-placeholder {
 }*/
 .logon-box{
     /*background: #58a;*/
-    margin-top: 20px;
+    margin-top: 0.2rem;
     text-align: center;
 
     /*color:red;*/
     /*background:hsl(0,50%,45%);*/
-    text-shadow:1px 1px #7a7a82, 2px 2px #7a7a82,
-                3px 3px #7a7a82,4px 4px #7a7a82, 
-                5px 5px #7a7a82 ,6px 6px #7a7a82;
+    text-shadow:0.01rem 0.01rem #7a7a82, 0.02rem 0.02rem #7a7a82,
+                0.03rem 0.03rem #7a7a82,0.04rem 0.04rem #7a7a82, 
+                0.05rem 0.05rem #7a7a82 ,0.06rem 0.06rem #7a7a82;
 
     font: bold 100%/1 Rockwell, serif;
 
@@ -1300,9 +1369,9 @@ input::-webkit-input-placeholder {
 }
 
 .logon-box a{
-    margin: 30px;
+    margin: 0.30rem;
     color: white;
-    font-size: 15px;
+    font-size: 0.15rem;
     text-decoration: none;
 }
 
@@ -1312,6 +1381,9 @@ input::-webkit-input-placeholder {
 
 .logon-box a:active{
     color: #ee7204;
+}
+input[type=checkbox] {
+  zoom: 100%;
 }
 
 /*//verify*/
@@ -1324,7 +1396,7 @@ input::-webkit-input-placeholder {
 }*/
 #register-modal ,#verify-modal{
     position:relative;
-    left:12px;
+    left:0.12rem;
 }
 /*placeholder居中*/
 
@@ -1332,58 +1404,53 @@ input::-webkit-input-placeholder {
         /*display:float !important; */
     /*margin:0 auto;*/
     width: 70%;
-    height: 32px;
+    height: .32rem;
     /*margin: 18px;*/
-    border: 1px solid #dcdcdc;
-    border-radius: 4px;
-    padding-left: 12px;
+    border: 0.01rem solid #dcdcdc;
+    border-radius: 0.04rem;
+    padding-left: 0.12rem;
 }
 
 .register-input-box3 input:hover,.register-input-box input:hover,.verify-input-box input:hover{
-    outline: 1px solid #eda838;
+    outline: 0.01rem solid #eda838;
 }
 
 .register-input-box3 input:focus,.register-input-box input:focus,.verify-input-box input:focus{
-    outline: 1px solid #918e6f;
+    outline: 0.01rem solid #918e6f;
 }
 
 .register-input-box2 input,.verify-input-box2 input,.img-verify-code input{
         /*display:float !important; */
     /*margin:0 auto;*/
     width: 50%;
-    height: 32px;
+    height: 0.32rem;
     /*margin: 18px;*/
-    border: 1px solid #dcdcdc;
-    border-radius:   4px 0 0 4px ;
-    padding-left: 12px;
-    margin-top: 10px;
-    margin-bottom: 12px;
+    border: 0.01rem solid #dcdcdc;
+    border-radius:   0.04rem 0 0 0.04rem ;
+    padding-left: 0.12rem;
+    /*margin-top: 0.10rem;*/
+    /*margin-bottom: 0.12rem;*/
 }
 
 .img-verify-code input:hover,.register-input-box2 input:hover,.verify-input-box2 input:hover{
-    outline: 1px solid #eda838;
+    outline: 0.01rem solid #eda838;
 }
 /*.login-input-box input:active{
     border: 1px solid #eda838;
 }*/
 .img-verify-code input:focus,.register-input-box2 input:focus,.verify-input-box2 input:focus{
-    outline: 1px solid #918e6f;
+    outline: 0.01rem solid #918e6f;
 }
 
 .register-input-box2{
     position:relative;
-    top:70px;
+    top:0.71rem;
 }
 .img-verify-code ,.login-input-box ,.verify-input-box, .register-input-box,.register-input-box3 ,.verify-input-box2{
     position:relative;
 
 }
 
-.confirm-verify-button {
-/*    position:absolute;
-    top:60%;*/
-    margin-top:40px;
-}
 /*#password-tip{
     position:relative;
     left:-20px;
@@ -1392,58 +1459,26 @@ input::-webkit-input-placeholder {
     position:relative;
     left:-22px;
 }*/
+
 .register-label{
     display:inline-block;
-    width:72px;
+    width:0.66rem;
 }
 #agree-policy{
-    font-size: 10px;
+    font-size: 0.1rem;
     /*color:red;*/
 }
-
-/*毛刷字体*/
-@font-face{
-    font-family:'bosk_brush_font';
-    src:url("C:\\work\\git-code\\code\\脚本\\css\\font\\Bosk.ttf");
-
+a,input,.login-button-box{
+    margin-top:0.25rem !important;
 }
-/*方正超细*/
-@font-face{
-    font-family:'FZLT';
-    src:url("C:\\work\\git-code\\code\\脚本\\css\\font\\FZLTCXHJW.TTF");
+.checkbox{
+ margin:0;
 }
-/*一般细*/
-@font-face{
-    font-family:'Helvetica';
-    src:url("C:\\work\\git-code\\code\\脚本\\css\\font\\Helvetica.ttf");
-}
-/*特细*/
-@font-face{
-    font-family:'HelveticaNeueLTPro-UltLt';
-    src:url("C:\\work\\git-code\\code\\脚本\\css\\font\\HelveticaNeueLTPro-UltLt.otf");
-}
-/*斜体特细*/
-@font-face{
-    font-family:'HelveticaNeueLTPro-ThIt';
-    src:url("C:\\work\\git-code\\code\\脚本\\css\\font\\HelveticaNeueLTPro-ThIt.otf");
-}
-@font-face{
-    font-family:'HelveticaNeueLTPro-Roman';
-    src:url("C:\\work\\git-code\\code\\脚本\\css\\font\\HelveticaNeueLTPro-Roman.otf");
+.confirm-verify-button,.confirm-register-button{
+    margin-top:0.3rem;
 }
 
-@font-face{
-    font-family:'STHeiti-Light';
-    src:url("C:\\work\\git-code\\code\\脚本\\css\\font\\STHeiti-Light.ttc");
-}
-.errors{
-    /*display:float;*/
-    position:absolute;
-    top:90%;
-    font:#9e2222;
-    left:14%;
-    /*bottom:-10px;*/
-}
+
 /*毛刷字体*/
 @font-face{
     font-family:'bosk_brush_font';
@@ -1482,9 +1517,13 @@ input::-webkit-input-placeholder {
 .errors{
     /*display:float;*/
     position:absolute;
-    top:90%;
-    font:#9e2222;
+    bottom:-0.2rem;
+    color:#9e2222;
+    /*left:0.7rem;*/
     left:14%;
-    /*bottom:-10px;*/
+/*    text-shadow: 0.0625rem 0.0625rem #7a7a82,0.0625rem 0.0625rem #7a7a82,0.0625rem 0.0625rem #7a7a82,0.0625rem 0.0625rem #7a7a82;*/
+
 }
 
+
+[v-cloak]{display:none !important;}
