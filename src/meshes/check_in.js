@@ -8,13 +8,18 @@ import VeeValidate from   "vee-validate"
 // var AuthCode = "123123";
 
 export default function checkIn(){
+    
     init();
     logRecommend();
     verifyRecommend();
     registRecommend();
 }
+var code;
+
 function init(){
 $(function(){
+    createCode();
+    $("body").css("display","block");
     console.log('ok');
     $("#verify-close-button,#login-close-button,#register-close-button").click(function(){
         $(".checkin-content").css("display","none");
@@ -41,7 +46,7 @@ $(function(){
         $("#login-content").css("display","none");
         $("#verify-content").css("display","none");
     });
-
+    $("#verify-img-button").click(createCode);
 })    
 
 
@@ -92,7 +97,17 @@ VeeValidate.Validator.extend('password_again',{
      validate:function(value){return /^\w{6,19}/.test(value)}
 });
 }
+VeeValidate.Validator.extend('img_verify_code',{
+    getMessage:function(){
+        return"Wrong! Please check it"
+    },
+    validate:function(value){
+         //设置一个全局的变量，便于保存验证码
+    return (value === code)
 
+    }
+
+})
 
 function logRecommend(){
     var classList = new Vue({
@@ -101,6 +116,8 @@ function logRecommend(){
             return {
                 account:"",
                 password:"",
+                img_verify_code:"",
+
             }
         },
         methods:{
@@ -208,3 +225,25 @@ function registRecommend(AuthCode){
         }
     })
 }
+//创建验证码
+function createCode(){
+    console.log("press the button");
+  //首先默认code为空字符串
+    code = '';
+    //设置长度，这里看需求，我这里设置了4
+    var codeLength = 4;
+    console.log(document);
+    var codeV = document.getElementById('verify-img-button');
+    console.log('!!!!!!!',codeV);
+    //设置随机字符
+    var random = new Array(0,1,2,3,4,5,6,7,8,9,'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R', 'S','T','U','V','W','X','Y','Z');
+    //循环codeLength 我设置的4就是循环4次
+    for(var i = 0; i < codeLength; i++){
+        //设置随机数范围,这设置为0 ~ 36
+         var index = Math.floor(Math.random()*36);
+         //字符串拼接 将每次随机的字符 进行拼接
+         code += random[index]; 
+    }
+    //将拼接好的字符串赋值给展示的Value
+    codeV.value = code;
+ }

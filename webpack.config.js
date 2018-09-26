@@ -45,7 +45,7 @@ module.exports = {
             loader: 'file-loader?limit=8192&name=fonts/[hash:8].[name].[ext]'
             // loader: 'file-loader',options:{name:'fonts/[hash:8].[name].[ext]'}
         },
-        { test: /\.(eot|woff|woff2|svg|ttf|ttc|TTF|otf)([\?]?.*)$/, loader: "file-loader" },
+        { test: /\.(eot|woff|woff2|svg|ttf|ttc|TTF|otf)([\?]?.*)$/, loader: "file-loader?limit=8192&name=fonts/[hash:8].[name].[ext]" },
     ]
     },
     plugins: [

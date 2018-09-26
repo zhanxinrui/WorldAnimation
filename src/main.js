@@ -8,9 +8,7 @@ import consts from "./consts";
 import $ from "jquery";
 import Vue from "vue";
 import VeeValidate from   "vee-validate"
-
 // import projector  from"./util/Projector"; 
-
 // import {dataMap} from "./dataMap";
 // import {checkDistance}from "./threed";
 import {
@@ -87,23 +85,17 @@ cameraMaxView,
         touchDisOnTouchMove,
         touchXOnWorldCS,
         touchYOnWorldCS
-
     },
 
 
 } = consts,
 
 container = document.getElementById("interactive"), trackballControls,
-
     state = new State();
-    var rocketObj;
-   // rotationObject1
-
-
-
+var rocketObj;
 document.body.appendChild(state.dom);
 
-$( ()=> init());
+$( ()=> init().then(function(){console.log('end the init')}));
 async function init() {
     let cacheF = cacheImages();
     let cacheF1 = cacheFonts();
@@ -141,10 +133,12 @@ async function init() {
   //  await scene.add(universe(imgs[5]))
     rocketObj = createRocket(fonts[2]);
     rocketObj.name = "Rocket";
-    await scene.add(rocketObj);
+    console.log('before await');
+    scene.add(rocketObj);
+    console.log('after await');
     //   await scene.add(createRsings());
     earthRotation.add(spike());//那个中央环
-    await scene.add(earthRotation);
+    scene.add(earthRotation);
     // await scene.add(createRings());//多层环，no need
    console.log('ok after add');
 
@@ -189,8 +183,7 @@ function setRender() {
         antialias: true,
         alpha: true //透明的话，画布就可以可以显示出css
     });
-  //
-//  renderer.sortObjects = true;
+    //  renderer.sortObjects = true;
 
     renderer.setSize(WIDTH, HEIGHT);
     renderer.setClearColor(0xffffff, 0);  //
@@ -199,7 +192,7 @@ function setRender() {
 
   //
 //  renderer.sortObjects = true;
-camera.position.set(0,0,0);
+    camera.position.set(0,0,0);
 
    // renderer1.setClearColor(0xFFFFFF, 1.0);
 

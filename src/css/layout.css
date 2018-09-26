@@ -14,7 +14,9 @@ body {
 	overflow: hidden;
 	font-family: STHeiti-Light;
 	font-style: normal;
+	display:none;
 	}
+[v-cloak]{display:none;}
 	/*
 	#fps {
 		display: none;
@@ -224,12 +226,12 @@ GENERIC STUFF
 			#location .title {
 				display: block;
 				font-size: 60px;
-				line-height: 60px;
+				line-height: 1;
 			}
 			#location .booktype {
 				display: block;
 				font-size: 18px;
-				line-height: 24px;
+				line-height: 0.75;
 			}
 
 		#nav {
@@ -972,6 +974,7 @@ body{
     /*color:black;*/
 
 }
+
 .beBlock{
     display:block;
 }
@@ -992,17 +995,17 @@ body{
     margin-top: 15%;
     margin-left: auto;
     margin-right: auto;
-	display: block;*/
-	z-index:110;
+    display: block;*/
+    z-index:110;
 }
 #login-content,#verify-content,#register-content{
     position:absolute;
     left:-50%;
-	/*margin-left:-500px;*/
-	/* background-color: red; */
+    /*margin-left:-500px;*/
+    /* background-color: red; */
     background-color: rgba(232, 229, 227, 0.95);
     width: 490px;
-    height: 350px;
+    height: 400px;
     border: 1px solid #000000;
     border-radius: 6px;
 /*    padding: 10px;
@@ -1012,9 +1015,9 @@ body{
     display: none;
     padding-left:20px;
     padding-right:20px;
-	margin:50px;
-	/*垫高*/
-	/* z-index:120; */
+    margin:50px;
+    /*垫高*/
+    /* z-index:120; */
 }
 #register-content{
     height:450px;
@@ -1192,14 +1195,14 @@ input::-webkit-input-placeholder {
       outline: none;
 }
 
-.confirm-register-button button:hover,.verify-send-button button:hover,.login-button-box button:hover,.confirm-verify-button button:hover{
+#verify-img-button:hover,.confirm-register-button button:hover,.verify-send-button button:hover,.login-button-box button:hover,.confirm-verify-button button:hover{
   /*  background-color: #918e6f;*/
   /*border: 2px solid #ff7d0a;*/
    border: 2px solid #eda838;
    outline: none;
 }
 
-.confirm-register-button button:active,.verify-send-button button:active,.login-button-box button:active, .confirm-verify-button button:active{
+#verify-img-button:active,.confirm-register-button button:active,.verify-send-button button:active,.login-button-box button:active, .confirm-verify-button button:active{
     background-color: #635b31;
       outline: none;
 
@@ -1233,8 +1236,26 @@ input::-webkit-input-placeholder {
 
 
 
+#verify-img-button{
+    width:95px;
+    font-family:Arial;  
+    font-style:italic;  
+    font-weight:bold;  
+    border:0;  
+    letter-spacing:2px;  
+    color:#ccccc2;  
 
-.verify-send-button{
+        /*background-color: #918e6f;*/
+    /*color: #ffffff;*/
+    font-size: 16px;
+    width: 97px;
+    height: 34px;
+    /*margin-left: 10px;*/
+    background-color: #918e6f;
+    border: 1px solid #918e6f;
+    border-radius: 0  6px 6px 0;
+}
+#verify-img,.verify-send-button{
         display:inline;
         position:relative;
         left:-3px;
@@ -1326,7 +1347,7 @@ input::-webkit-input-placeholder {
     outline: 1px solid #918e6f;
 }
 
-.register-input-box2 input,.verify-input-box2 input{
+.register-input-box2 input,.verify-input-box2 input,.img-verify-code input{
         /*display:float !important; */
     /*margin:0 auto;*/
     width: 50%;
@@ -1339,13 +1360,13 @@ input::-webkit-input-placeholder {
     margin-bottom: 12px;
 }
 
-.register-input-box2 input:hover,.verify-input-box2 input:hover{
+.img-verify-code input:hover,.register-input-box2 input:hover,.verify-input-box2 input:hover{
     outline: 1px solid #eda838;
 }
 /*.login-input-box input:active{
     border: 1px solid #eda838;
 }*/
-.register-input-box2 input:focus,.verify-input-box2 input:focus{
+.img-verify-code input:focus,.register-input-box2 input:focus,.verify-input-box2 input:focus{
     outline: 1px solid #918e6f;
 }
 
@@ -1353,7 +1374,7 @@ input::-webkit-input-placeholder {
     position:relative;
     top:70px;
 }
-.login-input-box ,.verify-input-box, .register-input-box,.register-input-box3 ,.verify-input-box2{
+.img-verify-code ,.login-input-box ,.verify-input-box, .register-input-box,.register-input-box3 ,.verify-input-box2{
     position:relative;
 
 }
@@ -1378,6 +1399,50 @@ input::-webkit-input-placeholder {
 #agree-policy{
     font-size: 10px;
     /*color:red;*/
+}
+
+/*毛刷字体*/
+@font-face{
+    font-family:'bosk_brush_font';
+    src:url("C:\\work\\git-code\\code\\脚本\\css\\font\\Bosk.ttf");
+
+}
+/*方正超细*/
+@font-face{
+    font-family:'FZLT';
+    src:url("C:\\work\\git-code\\code\\脚本\\css\\font\\FZLTCXHJW.TTF");
+}
+/*一般细*/
+@font-face{
+    font-family:'Helvetica';
+    src:url("C:\\work\\git-code\\code\\脚本\\css\\font\\Helvetica.ttf");
+}
+/*特细*/
+@font-face{
+    font-family:'HelveticaNeueLTPro-UltLt';
+    src:url("C:\\work\\git-code\\code\\脚本\\css\\font\\HelveticaNeueLTPro-UltLt.otf");
+}
+/*斜体特细*/
+@font-face{
+    font-family:'HelveticaNeueLTPro-ThIt';
+    src:url("C:\\work\\git-code\\code\\脚本\\css\\font\\HelveticaNeueLTPro-ThIt.otf");
+}
+@font-face{
+    font-family:'HelveticaNeueLTPro-Roman';
+    src:url("C:\\work\\git-code\\code\\脚本\\css\\font\\HelveticaNeueLTPro-Roman.otf");
+}
+
+@font-face{
+    font-family:'STHeiti-Light';
+    src:url("C:\\work\\git-code\\code\\脚本\\css\\font\\STHeiti-Light.ttc");
+}
+.errors{
+    /*display:float;*/
+    position:absolute;
+    top:90%;
+    font:#9e2222;
+    left:14%;
+    /*bottom:-10px;*/
 }
 /*毛刷字体*/
 @font-face{
@@ -1422,4 +1487,4 @@ input::-webkit-input-placeholder {
     left:14%;
     /*bottom:-10px;*/
 }
-[v-cloak]{display:none;}
+
